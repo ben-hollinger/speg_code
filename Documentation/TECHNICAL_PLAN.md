@@ -29,8 +29,7 @@ classDiagram
         <<interface>>
         +string DisplayName
         +GetAttackPower() int
-        +GetDefensePower() int
-        +GetAvailableMoves() List~CombatMoveData~
+        +TakeDamage(int amount) void
         +OnCombatStart() void
         +OnCombatEnd(bool won) void
     }
@@ -41,11 +40,9 @@ classDiagram
 **Enums:**
 ```
 GameState: Exploration, Combat, Puzzle, Inventory, Paused, Transition
-MoveType: Attack, Heal, Buff, Debuff
-MoveTarget: Self, Enemy
-AbilityType: DoubleJump, DashStrike, Shield, Grapple, CombatMove
-CombatPhase: PlayerSelectMove, PlayerExecute, EnemyWindup, PlayerParry: EnemyExecute, Victory, Defeat
-ParryResult: Perfect, Partial, Miss
+AbilityType: Dodge, DashStrike, Block, Grapple, MeleeAttack, RangedAttack
+BulletPatternType: Straight, Spread, Circle, Wave, Spiral
+AttackType: Melee, Ranged, Projectile
 ```
 
 ---
@@ -63,53 +60,55 @@ classDiagram
         +string characterName
         +int maxHealth
         +int baseAttack
-        +int baseDefense
         +GameObject modelPrefab
-        +List~CombatMoveData~ baseMoves
     }
 
     class PlayerCharacterData {
         <<ScriptableObject>>
         +float moveSpeed
-        +float jumpForce
-        +Vector3 cameraOffset
-        +float cameraAngle
+        +float dodgeSpeed
+        +float dodgeDuration
+        +float dodgeCooldown
     }
 
     class EnemyData {
         <<ScriptableObject>>
-        +float aggroRange
         +int keysDropped
-        +float healThreshold
-        +float specialMoveChance
+        +float attackCooldown
+        +List~BulletPatternData~ bulletPatterns
+        +AnimationClip deathAnimation
+        +AudioClip deathSFX
     }
 
-    class CombatMoveData {
+    class BulletPatternData {
         <<ScriptableObject>>
-        +string moveName
-        +MoveType moveType
-        +MoveTarget target
-        +int power
-        +float critChance
-        +float accuracy
-        +AudioClip soundEffect
-        +GameObject vfxPrefab
+        +string patternName
+        +BulletPatternType patternType
+        +float shootSpeed
+        +int bulletCount
+        +float spreadAngle
+        +float fireRate
+        +AudioClip fireSFX
+        +GameObject bulletPrefab
+        +AnimationClip attackAnimation
     }
 
     class WeaponData {
         <<ScriptableObject>>
         +string weaponName
         +GameObject modelPrefab
-        +int bonusDamage
-        +float bonusCritChance
-        +List~CombatMoveData~ weaponMoves
+        +int baseDamage
+        +float fireRate
+        +float bulletSpeed
+        +GameObject bulletPrefab
+        +AnimationClip attackAnimation
+        +AudioClip fireSFX
     }
 
     class HatData {
         <<ScriptableObject>>
         +string hatName
         +GameObject modelPrefab
-        +int bonusDefense
         +int bonusMaxHealth
     }
 
@@ -118,7 +117,8 @@ classDiagram
         +string abilityName
         +AbilityType abilityType
         +float abilityValue
-        +CombatMoveData grantedCombatMove
+        +float cooldownDuration
+        +AnimationClip activationAnimation
     }
 
     class LevelData {
@@ -135,18 +135,18 @@ classDiagram
         +List~LootEntry~ loot
     }
 
-    class LockpickPuzzleData {
+    class BulletData {
         <<ScriptableObject>>
-        +int pinCount
-        +float sweetSpotSize
-        +float rotationSpeed
+        +int damage
+        +float lifetime
+        +float speed
+        +GameObject vfxPrefab
     }
 
     CharacterData <|-- PlayerCharacterData
     CharacterData <|-- EnemyData
-    CharacterData o-- CombatMoveData : baseMoves
-    WeaponData o-- CombatMoveData : weaponMoves
-    AbilityData o-- CombatMoveData : grantedCombatMove
+    EnemyData o-- BulletPatternData : bulletPatterns
+    WeaponData o-- BulletData : uses
     LevelData o-- AbilityData : abilityUnlocked
 ```
 
@@ -163,10 +163,12 @@ classDiagram
     class PlayerController {
         <<MonoBehaviour>>
         -PlayerCharacterData characterData
+        -Vector3 moveDirection
         +SetInputEnabled(bool enabled) void
-        +OnMove() void
-        +OnJump() void
-        +OnInteract() void
+        +OnMove(Vector2 input) void
+        +OnDodge() void
+        +OnMeleeAttack() void
+        +OnRangedAttack() void
         +OnInventory() void
     }
 
@@ -174,8 +176,6 @@ classDiagram
         <<MonoBehaviour>>
         -int currentHealth
         +Action OnHealthChanged
-        +GetTotalAttack() int
-        +GetTotalDefense() int
         +GetTotalMaxHealth() int
         +TakeDamage(int amount) void
         +Heal(int amount) void
@@ -202,12 +202,13 @@ classDiagram
     class PlayerAbilityHandler {
         <<MonoBehaviour>>
         -HashSet~AbilityType~ unlockedAbilities
+        -Dictionary~AbilityType, float~ abilityCooldowns
         +UnlockAbility(AbilityData ability) void
         +HasAbility(AbilityType type) bool
-        +TryDoubleJump() bool
-        +TryDash() void
-        +TryShield() void
-        +GetAbilityCombatMoves() List~CombatMoveData~
+        +TryDodge() bool
+        +TryBlock() void
+        +TryGrapple() void
+        +IsAbilityOnCooldown(AbilityType type) bool
     }
 
     PlayerController ..|> ICombatant
@@ -237,26 +238,47 @@ classDiagram
         -EnemyData enemyData
         -int currentHealth
         -bool isDefeated
+        -BulletPatternData currentPattern
+        -float nextAttackTime
         +GetAttackPower() int
-        +GetDefensePower() int
-        +GetAvailableMoves() List~CombatMoveData~
         +TakeDamage(int amount) void
-        +OnCombatEnd(bool won) void
+        +ExecuteAttackPattern() void
+        +PlayDeathAnimation() void
+        +DropLoot() void
+        +OnDefeated() void
+    }
+
+    class BulletEmitter {
+        <<MonoBehaviour>>
+        +FireBullets(BulletPatternData pattern, Transform firePoint) void
+    }
+
+    class Bullet {
+        <<MonoBehaviour>>
+        -int damage
+        -float lifetime
+        -Vector3 direction
+        +OnTriggerEnter(Collider other) void
     }
 
     EnemyController ..|> ICombatant
     EnemyController --> EnemyData : reads
+    EnemyController --> BulletEmitter
+    BulletEmitter --> Bullet : spawns
+    BulletEmitter --> BulletPatternData : reads
 ```
 
-- One `EnemyController` prefab variant per enemy type
-- Aggro detection (triggers combat) handled in `EnemyController` 
-- On defeat: awards keys, plays death animation, disables self, etc.
+- Enemies are placed manually in level scenes and are stationary (do not chase player)
+- Each enemy has a list of `BulletPatternData` assets defining their attack patterns
+- Enemies fire at intervals based on `attackCooldown` and selected pattern
+- On defeat: plays death animation, drops keys, plays death sound effect, disables GameObject
+- Different bullet patterns (straight, spread, circle, wave, spiral) defined via SO data
 
 ---
 
 ## Combat System
 
-Turn based 1v1. Operates on `ICombatant`.
+Real time action combat. Player must dodge enemy bullet patterns and attacks, then strike back with melee or ranged attacks.
 
 ```mermaid
 classDiagram
@@ -264,48 +286,49 @@ classDiagram
 
     class CombatManager {
         <<MonoBehaviour>>
-        -ICombatant player
-        -ICombatant enemy
-        -CombatPhase currentPhase
-        +StartCombat(ICombatant p, ICombatant e) void
-        +OnMoveSelected(CombatMoveData move) void
-        +OnParryResult(ParryResult result) void
-        +EndCombat(bool playerWon) void
+        -PlayerController player
+        -List~EnemyController~ activeEnemies
+        +AddEnemy(EnemyController enemy) void
+        +RemoveEnemy(EnemyController enemy) void
+        +OnEnemyDefeated(EnemyController enemy) void
+        +AreAllEnemiesDefeated() bool
     }
 
     class DamageCalculator {
         <<static>>
-        +CalculateDamage(int atk, CombatMoveData move, int def, float crit, ParryResult parry)$ int
-        +CalculateHeal(CombatMoveData move)$ int
+        +CalculateDamage(int atk, int baseBulletDamage, HatData hat)$ int
     }
 
-    class ParrySystem {
+    class DodgeSystem {
         <<MonoBehaviour>>
-        -float parryWindowDuration
-        -float perfectWindowDuration
-        +Action~ParryResult~ OnParryComplete
-        +StartParryWindow() void
-        +OnParryInput() void
+        -float dodgeDuration
+        -float dodgeCooldown
+        -bool isDodging
+        +TryDodge() bool
+        +IsDodging() bool
+        +Update() void
     }
 
-    class EnemyCombatAI {
+    class WeaponController {
         <<MonoBehaviour>>
-        +SelectMove(ICombatant enemy, ICombatant player) CombatMoveData
+        -WeaponData currentWeapon
+        +OnMeleeAttack(Vector3 direction) void
+        +OnRangedAttack(Vector3 direction) void
+        +IsOnCooldown() bool
     }
 
-    CombatManager --> ICombatant : player
-    CombatManager --> ICombatant : enemy
-    CombatManager --> ParrySystem
-    CombatManager --> EnemyCombatAI
+    class ProjectilePool {
+        <<MonoBehaviour, Singleton>>
+        +GetBullet(GameObject prefab) GameObject
+        +ReturnBullet(GameObject bullet) void
+    }
+
+    CombatManager --> EnemyController
     CombatManager ..> DamageCalculator : static calls
-    EnemyCombatAI --> EnemyData : reads AI params
+    WeaponController --> WeaponData
+    WeaponController --> ProjectilePool : spawns
+    DodgeSystem --> PlayerAbilityHandler
 ```
-
-**Turn order:**
-
-1. Player picks a move -> player executes
-2. Enemy AI picks a move -> parry window opens → enemy executes
-3. Repeat until one side is dead
 
 ---
 
@@ -410,16 +433,14 @@ classDiagram
         +UpdateKeys(int count) void
         +UpdateEquipment(WeaponData w, HatData h) void
         +UpdateAbilities(List~AbilityData~ a) void
+        +ShowWeaponCooldown(float remaining) void
     }
 
-    class CombatUI {
+    class CombatHUD {
         <<MonoBehaviour>>
-        +ShowMoveSelection(List~CombatMoveData~ moves, Action~CombatMoveData~ onSelect) void
-        +ShowParryPrompt() void
-        +HideParryPrompt() void
-        +UpdateHealthBars(int pHP, int pMax, int eHP, int eMax) void
-        +ShowDamageNumber(int amount, bool isCrit) void
-        +ShowResult(string message) void
+        +UpdateHealthBars(int pHP, int pMax) void
+        +ShowDamageNumber(int amount) void
+        +ShowEnemyList(List~EnemyController~ enemies) void
     }
 
     class InventoryUI {
@@ -438,7 +459,7 @@ classDiagram
     }
 
     UIManager *-- HUDController
-    UIManager *-- CombatUI
+    UIManager *-- CombatHUD
     UIManager *-- InventoryUI
     UIManager *-- PauseMenuUI
     InventoryUI --> PlayerInventory
@@ -509,18 +530,23 @@ classDiagram
     class PlayerInventory
     class PlayerAbilityHandler
     class EnemyController
+    class BulletEmitter
+    class Bullet
     class DamageCalculator {
         <<static>>
     }
-    class ParrySystem
-    class EnemyCombatAI
+    class DodgeSystem
+    class WeaponController
+    class ProjectilePool {
+        <<Singleton>>
+    }
     class LevelGate
     class TreasureChest
     class Hazard
     class PuzzleManager
     class LockpickPuzzleUI
     class HUDController
-    class CombatUI
+    class CombatHUD
     class InventoryUI
     class PauseMenuUI
 
@@ -535,16 +561,19 @@ classDiagram
     PlayerController --> PlayerStats : sibling
     PlayerController --> PlayerInventory : sibling
     PlayerController --> PlayerAbilityHandler : sibling
+    PlayerController --> DodgeSystem : sibling
+    PlayerController --> WeaponController : sibling
 
     %% Combat
-    CombatManager --> ParrySystem
-    CombatManager --> EnemyCombatAI
-    CombatManager --> CombatUI
+    CombatManager --> EnemyController
     CombatManager ..> DamageCalculator
+    WeaponController --> ProjectilePool
+    BulletEmitter --> Bullet
+    EnemyController --> BulletEmitter
 
     %% UI composition
     UIManager *-- HUDController
-    UIManager *-- CombatUI
+    UIManager *-- CombatHUD
     UIManager *-- InventoryUI
     UIManager *-- PauseMenuUI
     InventoryUI --> PlayerInventory
@@ -565,5 +594,4 @@ classDiagram
 
     %% Combat uses interfaces
     CombatManager --> ICombatant : player
-    CombatManager --> ICombatant : enemy
 ```
