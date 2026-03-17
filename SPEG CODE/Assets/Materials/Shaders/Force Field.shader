@@ -1,4 +1,4 @@
-﻿/*
+/*
                ███████╗░█████╗░██████╗░░█████╗░███████╗  ███████╗██╗███████╗██╗░░░░░██████╗░
                ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝  ██╔════╝██║██╔════╝██║░░░░░██╔══██╗
                █████╗░░██║░░██║██████╔╝██║░░╚═╝█████╗░░  █████╗░░██║█████╗░░██║░░░░░██║░░██║
@@ -43,7 +43,9 @@ Shader "Ultimate 10+ Shaders/Force Field"
         _MainTex ("Texture", 2D) = "white" {}
         [HDR] _Color ("Color", Color) = (1,1,1,1)
 
-        _FresnelPower("Fresnel Power", Range(0, 10)) = 3
+        _FresnelPower("Fresnel Power", Range(0, 20)) = 3
+        _CenterFill ("Center Fill (Opacity)", Range(0, 1)) = 0.25
+        _CenterDarken ("Center Darken", Range(0, 1)) = 0.35
         _ScrollDirection ("Scroll Direction", float) = (0, 0, 0, 0)
     }
     SubShader
@@ -88,6 +90,8 @@ Shader "Ultimate 10+ Shaders/Force Field"
 
             fixed4 _Color;
             half _FresnelPower;
+            half _CenterFill;
+            half _CenterDarken;
             half2 _ScrollDirection;
 
             
@@ -117,8 +121,20 @@ Shader "Ultimate 10+ Shaders/Force Field"
             fixed4 pixel;
             fixed4 frag (v2f input) : SV_Target
             {
-                pixel = tex2D(_MainTex, input.uv) * _Color * pow(_FresnelPower, input.rim);
-                pixel = lerp(0, pixel, input.rim);
+                fixed4 tex = tex2D(_MainTex, input.uv);
+
+                half rim = saturate(input.rim);
+                half center = 1.0h - rim;
+
+                fixed4 rimPixel = tex * _Color * pow(_FresnelPower, rim);
+                rimPixel = lerp(0, rimPixel, rim);
+
+                fixed4 centerPixel = tex * _Color;
+                centerPixel.rgb *= (1.0h - _CenterDarken);
+                centerPixel.a *= _CenterFill;
+                centerPixel *= center;
+
+                pixel = rimPixel + centerPixel;
                 
                 return clamp(pixel, 0, _Color);
             }
