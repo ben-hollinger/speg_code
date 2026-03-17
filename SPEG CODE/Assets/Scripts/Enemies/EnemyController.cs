@@ -9,9 +9,10 @@ public class EnemyController : MonoBehaviour, ICombatant
     private bool _isDefeated;
     private float _nextAttackTime;
     private bool _isAttacking;
+    private bool _wasInAttackState;
+    private bool _attackRequested;
 
     [Header("Attacks")]
-    [Tooltip("Number of distinct attack animations wired in the Animator (AttackIndex = 0..attackCount-1).")]
     [SerializeField] private int _attackCount = 2;
     private int _attackIndex = -1;
 
@@ -31,12 +32,18 @@ public class EnemyController : MonoBehaviour, ICombatant
     {
         if (_isDefeated || _enemyData == null) return;
 
-        if (_isAttacking && _animator != null && !_animator.GetCurrentAnimatorStateInfo(0).IsTag("attack"))
+        if (_animator != null)
         {
-            OnAttackStateExited();
+            bool isInAttackState = _animator.GetCurrentAnimatorStateInfo(0).IsTag("attack");
+
+            if (isInAttackState && !_wasInAttackState) _isAttacking = true;
+
+            if (!isInAttackState && _wasInAttackState) OnAttackStateExited();
+
+            _wasInAttackState = isInAttackState;
         }
 
-        if (!_isAttacking && Time.time >= _nextAttackTime && _attackCount > 0)
+        if (!_isAttacking && !_attackRequested && Time.time >= _nextAttackTime && _attackCount > 0)
         {
             TriggerNextAttack();
         }
@@ -48,8 +55,8 @@ public class EnemyController : MonoBehaviour, ICombatant
 
         if (_attackCount <= 0) return;
 
-        _isAttacking = true;
         _attackIndex = (_attackIndex + 1) % _attackCount;
+        _attackRequested = true;
 
         _animator.SetInteger("AttackIndex", _attackIndex);
         _animator.SetTrigger("Attack");
@@ -63,6 +70,7 @@ public class EnemyController : MonoBehaviour, ICombatant
         }
 
         _isAttacking = true;
+        _attackRequested = false;
     }
 
     public void OnAttackStateExited()
@@ -73,6 +81,7 @@ public class EnemyController : MonoBehaviour, ICombatant
         }
 
         _isAttacking = false;
+        _attackRequested = false;
         _nextAttackTime = Time.time + _enemyData.AttackInterval;
     }
 
@@ -121,6 +130,7 @@ public class EnemyController : MonoBehaviour, ICombatant
 
         _isDefeated = true;
         _isAttacking = false;
+        _attackRequested = false;
 
         if (_animator != null)
         {
