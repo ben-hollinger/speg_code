@@ -475,11 +475,14 @@ classDiagram
 
     class AudioManager {
         <<MonoBehaviour, Singleton>>
+        -AudioSource musicSource
+        -AudioSource sfxSource
+        -float musicVolume
+        -float sfxVolume
         +PlayMusic(AudioClip clip) void
         +StopMusic() void
-        +PlaySFX(AudioClip clip) void
         +SetMusicVolume(float vol) void
-        +SetSFXVolume(float vol) void
+        +PlaySfx(AudioClip clip, float volumeMultiplier) void
     }
 ```
 
