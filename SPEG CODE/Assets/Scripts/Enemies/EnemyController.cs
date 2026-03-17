@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour, ICombatant
     private int _currentHealth;
     private bool _isDefeated;
     private float _nextAttackTime;
+    private bool _isAttacking;
 
     [Header("Attacks")]
     [Tooltip("Number of distinct attack animations wired in the Animator (AttackIndex = 0..attackCount-1).")]
@@ -30,10 +31,14 @@ public class EnemyController : MonoBehaviour, ICombatant
     {
         if (_isDefeated || _enemyData == null) return;
 
-        if (Time.time >= _nextAttackTime && _attackCount > 0)
+        if (_isAttacking && _animator != null && !_animator.GetCurrentAnimatorStateInfo(0).IsTag("attack"))
+        {
+            OnAttackStateExited();
+        }
+
+        if (!_isAttacking && Time.time >= _nextAttackTime && _attackCount > 0)
         {
             TriggerNextAttack();
-            _nextAttackTime = Time.time + _enemyData.AttackInterval;
         }
     }
 
@@ -43,10 +48,32 @@ public class EnemyController : MonoBehaviour, ICombatant
 
         if (_attackCount <= 0) return;
 
+        _isAttacking = true;
         _attackIndex = (_attackIndex + 1) % _attackCount;
 
         _animator.SetInteger("AttackIndex", _attackIndex);
         _animator.SetTrigger("Attack");
+    }
+
+    public void OnAttackStateEntered()
+    {
+        if (_isDefeated)
+        {
+            return;
+        }
+
+        _isAttacking = true;
+    }
+
+    public void OnAttackStateExited()
+    {
+        if (_isDefeated || _enemyData == null)
+        {
+            return;
+        }
+
+        _isAttacking = false;
+        _nextAttackTime = Time.time + _enemyData.AttackInterval;
     }
 
     public int GetAttackPower()
@@ -93,6 +120,7 @@ public class EnemyController : MonoBehaviour, ICombatant
         }
 
         _isDefeated = true;
+        _isAttacking = false;
 
         if (_animator != null)
         {
