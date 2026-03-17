@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 689ae5ef4596499d893017b4846a8b7a, type: 3}
+  m_Name: Mutant Spread
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPatternData
+  _patternName: Mutant Spread
+  _patternWeight: 1
+  _bulletCount: 7
+  _baseSpeed: 7
+  _damage: 1
+  _lifetime: 4
+  _spreadAngle: 90
+  _radius: 1
+  _angleOffset: 0
