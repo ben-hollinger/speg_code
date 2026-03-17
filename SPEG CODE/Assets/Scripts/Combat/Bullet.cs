@@ -8,13 +8,11 @@ public class Bullet : MonoBehaviour
 
     private Vector3 _velocity;
     private float _timeAlive;
-    public void Initialize(Vector3 direction, float speed, int damage, float lifetime)
+
+    public void Initialize(Vector3 direction, int damage)
     {
-        const float constantSpeed = 5f;
-        _velocity = direction.normalized * constantSpeed;
-        _speed = constantSpeed;
+        _velocity = direction.normalized * _speed;
         _damage = damage;
-        _lifetime = lifetime;
         _timeAlive = 0f;
     }
 
