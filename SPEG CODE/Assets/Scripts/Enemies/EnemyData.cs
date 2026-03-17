@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyData", menuName = "Data/Enemy")]
@@ -14,15 +13,11 @@ public class EnemyData : ScriptableObject
     [SerializeField] private AnimationClip _deathAnimation;
     [SerializeField] private AudioClip _deathSfx;
 
-    [Header("Bullet Patterns")]
-    [SerializeField] private List<BulletPatternData> _bulletPatterns = new List<BulletPatternData>();
-
     public string EnemyName => _enemyName;
     public int MaxHealth => _maxHealth;
     public float AttackInterval => _attackInterval;
     public GameObject ModelPrefab => _modelPrefab;
     public AnimationClip DeathAnimation => _deathAnimation;
     public AudioClip DeathSfx => _deathSfx;
-    public IReadOnlyList<BulletPatternData> BulletPatterns => _bulletPatterns;
 }
 

@@ -8,8 +8,11 @@ public class EnemyController : MonoBehaviour, ICombatant
     private int _currentHealth;
     private bool _isDefeated;
     private float _nextAttackTime;
-    private int _currentPatternIndex = -1;
-    private BulletPatternData _currentPattern;
+
+    [Header("Attacks")]
+    [Tooltip("Number of distinct attack animations wired in the Animator (AttackIndex = 0..attackCount-1).")]
+    [SerializeField] private int _attackCount = 2;
+    private int _attackIndex = -1;
 
     public string DisplayName => _enemyData != null ? _enemyData.EnemyName : name;
     public int CurrentHealth => _currentHealth;
@@ -27,40 +30,22 @@ public class EnemyController : MonoBehaviour, ICombatant
     {
         if (_isDefeated || _enemyData == null) return;
 
-        if (Time.time >= _nextAttackTime && _enemyData.BulletPatterns.Count > 0)
+        if (Time.time >= _nextAttackTime && _attackCount > 0)
         {
-            SelectNextPattern();
-            TriggerAttackAnimation();
+            TriggerNextAttack();
             _nextAttackTime = Time.time + _enemyData.AttackInterval;
         }
     }
 
-    private void SelectNextPattern()
-    {
-        if (_enemyData.BulletPatterns.Count == 0)
-        {
-            _currentPattern = null;
-            return;
-        }
-
-        if (_currentPatternIndex < 0) _currentPatternIndex = 0;
-        else
-        {
-            _currentPatternIndex++;
-            if (_currentPatternIndex >= _enemyData.BulletPatterns.Count)
-            {
-                _currentPatternIndex = 0;
-            }
-        }
-
-        _currentPattern = _enemyData.BulletPatterns[_currentPatternIndex];
-    }
-
-    private void TriggerAttackAnimation()
+    private void TriggerNextAttack()
     {
         if (_animator == null) return;
 
-        _animator.SetInteger("AttackIndex", _currentPatternIndex);
+        if (_attackCount <= 0) return;
+
+        _attackIndex = (_attackIndex + 1) % _attackCount;
+
+        _animator.SetInteger("AttackIndex", _attackIndex);
         _animator.SetTrigger("Attack");
     }
 

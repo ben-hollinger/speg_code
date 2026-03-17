@@ -66,8 +66,7 @@ public class BulletEmitter : MonoBehaviour
         var bullet = bulletObject.GetComponent<Bullet>();
         if (bullet != null)
         {
-            const float bulletSpeed = 5f;
-            bullet.Initialize(direction, bulletSpeed, pattern.Damage, pattern.Lifetime);
+            bullet.Initialize(direction, pattern.Damage);
         }
     }
 }
