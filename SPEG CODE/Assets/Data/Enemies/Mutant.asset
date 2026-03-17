@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   _enemyName: Mutant
   _maxHealth: 100
-  _attackInterval: 1
+  _attackInterval: 0.5
   _modelPrefab: {fileID: 0}
   _deathAnimation: {fileID: 0}
   _deathSfx: {fileID: 0}

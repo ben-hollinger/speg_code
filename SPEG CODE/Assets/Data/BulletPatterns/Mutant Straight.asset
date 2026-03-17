@@ -13,19 +13,10 @@ MonoBehaviour:
   m_Name: Mutant Straight
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternData
   _patternName: Mutant Straight
-  _patternType: 0
   _patternWeight: 1
-  _bulletPrefab: {fileID: 1472109954984638514, guid: bb80b33f482fe0cd9be4a351bd69e6e4, type: 3}
-  _bulletColor: {r: 1, g: 0.4, b: 0.4, a: 1}
-  _bulletCount: 1
-  _baseSpeed: 8
-  _baseDamage: 1
-  _lifetime: 4
-  _spreadAngle: 30
+  _bulletCount: 4
+  _damage: 1
+  _lineSpacing: 1
+  _spreadAngle: 100
   _radius: 1
   _angleOffset: 0
-  _fireRate: 4
-  _burstCount: 1
-  _burstInterval: 0.2
-  _sweepSpeed: 90
-  _fireSfx: {fileID: 0}
