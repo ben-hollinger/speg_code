@@ -10,9 +10,15 @@ public class BulletEmitter : MonoBehaviour
         Vector3 forward = transform.forward;
         int count = Mathf.Max(1, pattern.BulletCount);
 
+        Vector3 right = transform.right;
+        float spacing = Mathf.Max(0f, pattern.LineSpacing);
+        float halfWidth = (count - 1) * spacing * 0.5f;
+
         for (int i = 0; i < count; i++)
         {
-            SpawnBullet(_firePoint.position, forward, pattern);
+            float offset = i * spacing - halfWidth;
+            Vector3 pos = _firePoint.position + right * offset;
+            SpawnBullet(pos, forward, pattern);
         }
     }
 
