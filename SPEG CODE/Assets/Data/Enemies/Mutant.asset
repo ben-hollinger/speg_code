@@ -13,14 +13,8 @@ MonoBehaviour:
   m_Name: Mutant
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   _enemyName: Mutant
-  _maxHealth: 10
-  _attackInterval: 5
+  _maxHealth: 100
+  _attackInterval: 1
   _modelPrefab: {fileID: 0}
   _deathAnimation: {fileID: 0}
   _deathSfx: {fileID: 0}
-  _bulletPatterns:
-  - {fileID: 11400000, guid: 6a776c4efee128bdbbe4ba906cf2964a, type: 2}
-  - {fileID: 11400000, guid: 0509925b58ae19b2fa2a7fca7d79a744, type: 2}
-  - {fileID: 11400000, guid: c4c89838e11fdc23cb3fcc0a64e94093, type: 2}
-  - {fileID: 11400000, guid: c4c89838e11fdc23cb3fcc0a64e94093, type: 2}
-  - {fileID: 11400000, guid: c4c89838e11fdc23cb3fcc0a64e94093, type: 2}
