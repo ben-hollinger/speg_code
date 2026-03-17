@@ -4,9 +4,11 @@ public class BulletEmitter : MonoBehaviour
 {
     [SerializeField] private Transform _firePoint;
     [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private AudioClip _attackSfxClip;
 
     private void FireStraight(BulletPatternData pattern)
     {
+        PlayAttackSfx();
         Vector3 forward = transform.forward;
         int count = Mathf.Max(1, pattern.BulletCount);
 
@@ -24,6 +26,7 @@ public class BulletEmitter : MonoBehaviour
 
     private void FireSpread(BulletPatternData pattern)
     {
+        PlayAttackSfx();
         Vector3 forward = transform.forward;
         int count = Mathf.Max(1, pattern.BulletCount);
         float spread = pattern.SpreadAngle;
@@ -48,6 +51,7 @@ public class BulletEmitter : MonoBehaviour
 
     private void FireCircle(BulletPatternData pattern)
     {
+        PlayAttackSfx();
         int count = Mathf.Max(1, pattern.BulletCount);
         Vector3 forward = transform.forward;
         float angleStep = 360f / count;
@@ -74,5 +78,11 @@ public class BulletEmitter : MonoBehaviour
         {
             bullet.Initialize(direction, pattern.Damage);
         }
+    }
+
+    private void PlayAttackSfx()
+    {
+        AudioManager.Instance.PlaySfx(_attackSfxClip
+        );
     }
 }

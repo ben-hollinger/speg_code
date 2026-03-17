@@ -13,14 +13,10 @@ MonoBehaviour:
   m_Name: Mutant Circle
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternData
   _patternName: Mutant Sweep
-  _patternType: 2
   _patternWeight: 1
-  _bulletPrefab: {fileID: 1472109954984638514, guid: bb80b33f482fe0cd9be4a351bd69e6e4, type: 3}
-  _bulletColor: {r: 0.4, g: 0.8, b: 1, a: 1}
-  _bulletCount: 16
-  _baseSpeed: 7
-  _baseDamage: 1
-  _lifetime: 4
+  _bulletCount: 12
+  _damage: 1
+  _lineSpacing: 0.25
   _spreadAngle: 45
   _radius: 1
   _angleOffset: 0

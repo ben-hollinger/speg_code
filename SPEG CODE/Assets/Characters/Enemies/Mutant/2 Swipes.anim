@@ -89131,7 +89131,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 1.1
+  - time: 1.1333333
     functionName: FireSpread
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 0509925b58ae19b2fa2a7fca7d79a744, type: 2}

@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternData
   _patternName: Mutant Spread
   _patternWeight: 1
-  _bulletCount: 7
-  _baseSpeed: 7
+  _bulletCount: 5
   _damage: 1
-  _lifetime: 4
+  _lineSpacing: 0.25
   _spreadAngle: 90
   _radius: 1
   _angleOffset: 0

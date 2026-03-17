@@ -59366,14 +59366,14 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.0666666
+  - time: 2
     functionName: FireCircle
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: c4c89838e11fdc23cb3fcc0a64e94093, type: 2}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.5666666
+  - time: 2.6
     functionName: FireCircle
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: c4c89838e11fdc23cb3fcc0a64e94093, type: 2}
