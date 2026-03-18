@@ -15,7 +15,7 @@ public class AudioManager : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float sfxVolume = 1f;
 
-    private AudioClip currentMusicClip;
+    [SerializeField] private AudioClip currentMusicClip;
 
     private void Awake()
     {
@@ -29,6 +29,11 @@ public class AudioManager : MonoBehaviour
         
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
+
+        if (currentMusicClip != null)
+        {
+            PlayMusic(currentMusicClip);
+        }
     }
     
     public void PlayMusic(AudioClip clip)
