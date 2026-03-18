@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Zombie
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   _enemyName: Zombie
-  _maxHealth: 15
+  _maxHealth: 100
   _attackInterval: 1
   _modelPrefab: {fileID: 0}
   _deathAnimation: {fileID: 0}
