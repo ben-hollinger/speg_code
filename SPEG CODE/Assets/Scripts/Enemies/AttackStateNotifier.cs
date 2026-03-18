@@ -5,23 +5,18 @@ public class AttackStateNotifier : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         var enemy = animator.GetComponentInParent<EnemyController>();
-        if (enemy == null)
-        {
-            return;
-        }
+        if (enemy != null) enemy.OnAttackStateEntered();
 
-        enemy.OnAttackStateEntered();
+        var player = animator.GetComponentInParent<PlayerController>();
+        if (player != null) player.OnAttackStateEntered();
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         var enemy = animator.GetComponentInParent<EnemyController>();
-        if (enemy == null)
-        {
-            return;
-        }
+        if (enemy != null) enemy.OnAttackStateExited();
 
-        enemy.OnAttackStateExited();
+        var player = animator.GetComponentInParent<PlayerController>();
+        if (player != null) player.OnAttackStateExited();
     }
 }
-
