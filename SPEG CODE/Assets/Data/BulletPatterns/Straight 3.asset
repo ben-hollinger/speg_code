@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 689ae5ef4596499d893017b4846a8b7a, type: 3}
-  m_Name: Mutant Circle
+  m_Name: Straight 3
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternData
-  _patternName: Mutant Sweep
+  _patternName: 
   _patternWeight: 1
-  _bulletCount: 12
+  _bulletCount: 3
   _damage: 1
-  _lineSpacing: 0.25
-  _spreadAngle: 45
+  _lineSpacing: 0.8
+  _spreadAngle: 100
   _radius: 1
   _angleOffset: 0

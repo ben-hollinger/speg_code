@@ -695,8 +695,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca840e15b2a6cb4c8b6c444b7b138ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletEmitter
-  _firePoint: {fileID: 3014112712810059223}
+  _firePoint: {fileID: 8659250585152397777}
   _bulletPrefab: {fileID: 1472109954984638514, guid: bb80b33f482fe0cd9be4a351bd69e6e4, type: 3}
+  _attackSfxClip: {fileID: 8300000, guid: c20f6a64cfbb3cf5eaf02a2d73d3221e, type: 3}
 --- !u!1 &3495570764429247487
 GameObject:
   m_ObjectHideFlags: 0

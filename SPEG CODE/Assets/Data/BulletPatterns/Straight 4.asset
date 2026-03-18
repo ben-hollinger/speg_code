@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 689ae5ef4596499d893017b4846a8b7a, type: 3}
-  m_Name: Mutant Spread
+  m_Name: Straight 4
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternData
-  _patternName: Mutant Spread
+  _patternName: 
   _patternWeight: 1
-  _bulletCount: 5
+  _bulletCount: 4
   _damage: 1
-  _lineSpacing: 0.25
-  _spreadAngle: 90
+  _lineSpacing: 1
+  _spreadAngle: 100
   _radius: 1
   _angleOffset: 0
