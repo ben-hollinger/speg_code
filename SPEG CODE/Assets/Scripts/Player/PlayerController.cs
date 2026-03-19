@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour, ICombatant
     [Header("SFX")]
     [SerializeField] private AudioClip _attackSoundClip;
     [SerializeField] private AudioClip _attackHitSoundClip;
+    [SerializeField] private AudioClip[] _footstepSoundClips;
 
     private PlayerMovement _movement;
     private PlayerStats _stats;
@@ -188,6 +189,11 @@ public class PlayerController : MonoBehaviour, ICombatant
         _movement.SetMoveInput(Vector2.zero);
         if (_animator != null)
             _animator.SetBool(IsDeadParam, true);
+    }
+
+    private void PlayFootstepSound()
+    {
+        AudioManager.Instance.PlaySfx(_footstepSoundClips[Random.Range(0, _footstepSoundClips.Length)]);
     }
 
     // ICombatant

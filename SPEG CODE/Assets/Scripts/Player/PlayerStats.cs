@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour, IDamageable
 {
     [SerializeField] private int _maxHealth = 100;
+    [SerializeField] private AudioClip[] _damageGruntClips;
 
     private int _currentHealth;
     private bool _isDead;
@@ -21,6 +22,8 @@ public class PlayerStats : MonoBehaviour, IDamageable
         if (_isDead || amount <= 0) return;
 
         _currentHealth = Mathf.Max(0, _currentHealth - amount);
+
+        AudioManager.Instance.PlaySfx(_damageGruntClips[Random.Range(0, _damageGruntClips.Length)]);
 
         if (_currentHealth <= 0)
             Die();
