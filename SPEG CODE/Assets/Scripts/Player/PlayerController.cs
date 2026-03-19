@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour, ICombatant
     [SerializeField, Range(0f, 1f)] private float _comboWindowStart = 0.45f;
     [SerializeField, Range(0f, 1f)] private float _comboWindowEnd = 0.90f;
 
+    [Header("Weapon Pose Targets")]
+    [SerializeField] private GameObject _armedWeaponPos;
+    [SerializeField] private GameObject _unarmedWeaponPos;
+
     [Header("SFX")]
     [SerializeField] private AudioClip _attackSoundClip;
     [SerializeField] private AudioClip _attackHitSoundClip;
@@ -77,6 +81,7 @@ public class PlayerController : MonoBehaviour, ICombatant
 
         MaybeUnfreezeOnLocomotionTransition();
         UpdateAnimator();
+        UpdateWeaponPoseTargets();
     }
 
     private void HandleMoveInput(Keyboard kb)
@@ -177,6 +182,33 @@ public class PlayerController : MonoBehaviour, ICombatant
         }
 
         AudioManager.Instance.PlaySfx(_attackSoundClip);
+    }
+
+    private void UpdateWeaponPoseTargets()
+    {
+
+        bool isIdle = false;
+        if (_animator != null)
+        {
+            AnimatorStateInfo current = _animator.GetCurrentAnimatorStateInfo(0);
+            isIdle = current.shortNameHash == IdleHash;
+
+            if (!isIdle && _animator.IsInTransition(0))
+            {
+                AnimatorStateInfo next = _animator.GetNextAnimatorStateInfo(0);
+                isIdle = next.shortNameHash == IdleHash;
+            }
+        }
+
+        bool useArmed = _isBusy;
+
+        if (_armedWeaponPos != null && _armedWeaponPos.activeSelf != useArmed) _armedWeaponPos.SetActive(useArmed);
+
+        if (_unarmedWeaponPos != null)
+        {
+            bool useUnarmed = !useArmed;
+            if (_unarmedWeaponPos.activeSelf != useUnarmed) _unarmedWeaponPos.SetActive(useUnarmed);
+        }
     }
 
     private static bool IsSlashState(int hash) => hash == InwardSlashHash || hash == OutwardSlashHash;
