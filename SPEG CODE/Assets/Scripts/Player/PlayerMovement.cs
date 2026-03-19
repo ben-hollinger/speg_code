@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 4f;
     [SerializeField] private float _gravity = -9.8f;
+    [SerializeField] private float _rotationSpeed = 720f;
 
     private CharacterController _cc;
     private Vector3 _moveInput;
@@ -36,6 +37,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!_isFrozen && _moveInput.sqrMagnitude > 0.001f)
+        {
+            Quaternion target = Quaternion.LookRotation(_moveInput.normalized, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation, target, _rotationSpeed * Time.deltaTime);
+        }
+
         _verticalVelocity += _gravity * Time.deltaTime;
 
         Vector3 horizontal = _isFrozen ? Vector3.zero : _moveInput;
