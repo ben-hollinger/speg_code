@@ -16,9 +16,7 @@ MonoBehaviour:
   maxHealth: 100
   baseAttack: 10
   modelPrefab: {fileID: 0}
-  moveSpeed: 5
-  rotationSpeed: 720
+  moveSpeed: 4
   gravity: -20
   meleeDamage: 15
   meleeRadius: 1.2
-  meleeHitRate: 0.4
