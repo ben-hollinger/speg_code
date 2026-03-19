@@ -13,6 +13,12 @@ public class AttackStateNotifier : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // If we are transitioning from one attack-tagged state to another, do not treat
+        // it as an attack end (this prevents prematurely ending combos).
+        var next = animator.GetNextAnimatorStateInfo(layerIndex);
+        if (next.IsTag("attack"))
+            return;
+
         var enemy = animator.GetComponentInParent<EnemyController>();
         if (enemy != null) enemy.OnAttackStateExited();
 
