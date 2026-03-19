@@ -67,22 +67,19 @@ public class BulletEmitter : MonoBehaviour
 
     private void SpawnBullet(Vector3 position, Vector3 direction, BulletPatternData pattern)
     {
-        if (_bulletPrefab == null)
-        {
-            return;
-        }
+        if (_bulletPrefab == null) return;
 
         GameObject bulletObject = Instantiate(_bulletPrefab, position, Quaternion.LookRotation(direction));
         var bullet = bulletObject.GetComponent<Bullet>();
         if (bullet != null)
         {
-            bullet.Initialize(direction, pattern.Damage);
+            bullet.Initialize(direction, pattern.Damage, isPlayerBullet: false, owner: transform.root);
         }
     }
 
     private void PlayAttackSfx()
     {
-        AudioManager.Instance.PlaySfx(_attackSfxClip
-        );
+        if (AudioManager.Instance == null) return;
+        AudioManager.Instance.PlaySfx(_attackSfxClip);
     }
 }

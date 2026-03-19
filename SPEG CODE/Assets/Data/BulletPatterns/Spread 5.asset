@@ -17,6 +17,6 @@ MonoBehaviour:
   _bulletCount: 5
   _damage: 1
   _lineSpacing: 0.25
-  _spreadAngle: 90
+  _spreadAngle: 110
   _radius: 1
   _angleOffset: 0
