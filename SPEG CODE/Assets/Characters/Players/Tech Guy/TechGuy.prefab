@@ -977,9 +977,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMotor
   _moveSpeed: 4
-  _gravity: -20
-  _jumpForce: 4
-  _rotationSpeed: 720
+  _gravity: -13
+  _jumpForce: 5
+  _rotationSpeed: 480
 --- !u!114 &7530675716785220793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -992,7 +992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d3a223834872b9459b4028fffb0c5bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  _characterData: {fileID: 11400000, guid: cfafc19efc16102d38ef595de07982f2, type: 2}
+  _displayName: Player
   _meleeHitPoint: {fileID: 0}
   _meleeRadius: 1.5
   _meleeDamage: 8

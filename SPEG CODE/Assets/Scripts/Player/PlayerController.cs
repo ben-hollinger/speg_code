@@ -3,8 +3,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, ICombatant
 {
-    [SerializeField] private PlayerCharacterData _characterData;
-
     [Header("Melee")]
     [SerializeField] private Transform _meleeHitPoint;
     [SerializeField] private float _meleeRadius = 1.2f;
@@ -45,7 +43,7 @@ public class PlayerController : MonoBehaviour, ICombatant
     private static readonly int InwardSlashHash = Animator.StringToHash("Inward Slash");
     private static readonly int OutwardSlashHash = Animator.StringToHash("Outward Slash");
 
-    public string DisplayName => _characterData != null ? _characterData.characterName : "Player";
+    public string DisplayName => _displayName;
     public int CurrentHealth => _stats.CurrentHealth;
     public int MaxHealth => _stats.MaxHealth;
     public bool IsDead => _stats.IsDead;
@@ -55,8 +53,6 @@ public class PlayerController : MonoBehaviour, ICombatant
         _movement = GetComponent<PlayerMovement>();
         _stats = GetComponent<PlayerStats>();
         _animator = GetComponentInChildren<Animator>();
-
-        _movement.SetMovement(_characterData.moveSpeed, _characterData.gravity, _characterData.jumpForce);
         _wasDead = _stats.IsDead;
 
         if (_animator != null)
@@ -186,7 +182,6 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private void UpdateWeaponPoseTargets()
     {
-
         bool isIdle = false;
         if (_animator != null)
         {
