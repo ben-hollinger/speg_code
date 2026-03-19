@@ -82,9 +82,6 @@ PrefabInstance:
       addedObject: {fileID: 8769554221224195056}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d75943d2c4df5082e9a99a22c0625f43, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2117071145846779969}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d75943d2c4df5082e9a99a22c0625f43, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7530675716785220793}
   m_SourcePrefab: {fileID: 100100000, guid: d75943d2c4df5082e9a99a22c0625f43, type: 3}
 --- !u!1 &1602220069054657347 stripped
@@ -165,21 +162,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34f26fd4ed63c57938fbedd647246e65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMotor
-  _moveSpeed: 5
+  _moveSpeed: 4
   _gravity: -20
---- !u!114 &2117071145846779969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1602220069054657347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77eeae43261815649b1d8a7fee078d0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAim
-  _rotationSpeed: 450
+  _rotationSpeed: 720
 --- !u!114 &7530675716785220793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,5 +184,5 @@ MonoBehaviour:
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 128
-  _shootPoint: {fileID: 0}
-  _bulletPrefab: {fileID: 1472109954984638514, guid: bb80b33f482fe0cd9be4a351bd69e6e4, type: 3}
+  _comboWindowStart: 0.45
+  _comboWindowEnd: 0.9
