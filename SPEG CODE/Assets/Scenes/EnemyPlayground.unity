@@ -1753,7 +1753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   musicSource: {fileID: 0}
   sfxSource: {fileID: 0}
-  musicVolume: 1
+  musicVolume: 0
   sfxVolume: 1
   currentMusicClip: {fileID: 8300000, guid: 693f15fb2a3f9195794f2f16b7ef0760, type: 3}
 --- !u!4 &626725390
