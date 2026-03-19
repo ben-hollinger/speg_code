@@ -186,3 +186,5 @@ MonoBehaviour:
     m_Bits: 128
   _comboWindowStart: 0.45
   _comboWindowEnd: 0.9
+  _attackSoundClip: {fileID: 8300000, guid: 39ed3940644f3857e8d0d3075b7b6289, type: 3}
+  _attackHitSoundClip: {fileID: 8300000, guid: e071b80fc0b2938b4bcead2db7f980ca, type: 3}

@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour, ICombatant
     [SerializeField, Range(0f, 1f)] private float _comboWindowStart = 0.45f;
     [SerializeField, Range(0f, 1f)] private float _comboWindowEnd = 0.90f;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip _attackSoundClip;
+    [SerializeField] private AudioClip _attackHitSoundClip;
+
     private PlayerMovement _movement;
     private PlayerStats _stats;
     private Animator _animator;
@@ -148,8 +152,6 @@ public class PlayerController : MonoBehaviour, ICombatant
         _comboQueuedFromHash = 0;
     }
 
-    public void OnMeleeHit() => PerformMeleeHit();
-
     // Called by animation event
     private void PerformMeleeHit()
     {
@@ -159,9 +161,13 @@ public class PlayerController : MonoBehaviour, ICombatant
         foreach (var hit in hits)
         {
             var dmg = hit.GetComponentInParent<IDamageable>();
-            if (dmg != null && !dmg.IsDead)
+            if (dmg != null && !dmg.IsDead) {
                 dmg.TakeDamage(_meleeDamage);
+                AudioManager.Instance.PlaySfx(_attackHitSoundClip);
+                return;
+            }
         }
+        AudioManager.Instance.PlaySfx(_attackSoundClip);
     }
 
     private static bool IsSlashState(int hash) => hash == InwardSlashHash || hash == OutwardSlashHash;
