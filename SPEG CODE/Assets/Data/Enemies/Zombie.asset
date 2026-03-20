@@ -20,4 +20,4 @@ MonoBehaviour:
   _turnSpeed: 360
   _modelPrefab: {fileID: 0}
   _deathAnimation: {fileID: 0}
-  _deathSfx: {fileID: 0}
+  _deathSfx: {fileID: 8300000, guid: 093a5dc60018d476791de718279859f3, type: 3}
