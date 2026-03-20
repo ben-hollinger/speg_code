@@ -977,9 +977,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMotor
   _moveSpeed: 4
-  _gravity: -13
-  _jumpForce: 5
-  _rotationSpeed: 480
+  _gravity: -25
+  _jumpForce: 8
+  _rotationSpeed: 720
 --- !u!114 &7530675716785220793
 MonoBehaviour:
   m_ObjectHideFlags: 0
