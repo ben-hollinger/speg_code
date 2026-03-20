@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour, ICombatant
 {
@@ -6,6 +7,9 @@ public class EnemyController : MonoBehaviour, ICombatant
     [SerializeField] private Animator _animator;
     [SerializeField] private BulletEmitter _bulletEmitter;
     [SerializeField] private Transform _targetPlayer;
+
+    [Header("UI")]
+    [SerializeField] private Slider _healthBarSlider;
     private int _currentHealth;
     private bool _isDefeated;
     private float _nextAttackTime;
@@ -28,6 +32,8 @@ public class EnemyController : MonoBehaviour, ICombatant
         if (_enemyData != null) _currentHealth = _enemyData.MaxHealth;
         if (_animator == null) _animator = GetComponent<Animator>();
         if (_bulletEmitter == null) _bulletEmitter = GetComponent<BulletEmitter>();
+
+        UpdateHealthBar();
     }
 
     private void Start() {
@@ -36,6 +42,7 @@ public class EnemyController : MonoBehaviour, ICombatant
 
     private void Update()
     {
+        UpdateHealthBar();
         if (_isDefeated || _enemyData == null) return;
 
         if (_animator != null)
@@ -156,10 +163,12 @@ public class EnemyController : MonoBehaviour, ICombatant
         if (_currentHealth <= 0)
         {
             Die();
+            UpdateHealthBar();
         }
         else if (_animator != null)
         {
             _animator.SetTrigger("Hit");
+            UpdateHealthBar();
         }
     }
 
@@ -169,6 +178,7 @@ public class EnemyController : MonoBehaviour, ICombatant
         }
 
         _currentHealth = Mathf.Clamp(_currentHealth + amount, 0, MaxHealth);
+        UpdateHealthBar();
     }
 
     private void Die()
@@ -188,6 +198,13 @@ public class EnemyController : MonoBehaviour, ICombatant
         }
 
         AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
+
+        UpdateHealthBar();
+    }
+
+    private void UpdateHealthBar()
+    {
+        _healthBarSlider.value = (float)_currentHealth/(float)MaxHealth;
     }
 }
 
