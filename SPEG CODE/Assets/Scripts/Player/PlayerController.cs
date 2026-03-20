@@ -3,6 +3,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, ICombatant
 {
+    public static PlayerController Instance { get; private set; }
+
+    [Header("Identity")]
+    [SerializeField] private string _displayName = "Player";
+
     [Header("Melee")]
     [SerializeField] private Transform _meleeHitPoint;
     [SerializeField] private float _meleeRadius = 1.2f;
@@ -50,6 +55,12 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("Multiple PlayerController instances found. Replacing previous instance.");
+        }
+        Instance = this;
+
         _movement = GetComponent<PlayerMovement>();
         _stats = GetComponent<PlayerStats>();
         _animator = GetComponentInChildren<Animator>();
@@ -57,6 +68,14 @@ public class PlayerController : MonoBehaviour, ICombatant
 
         if (_animator != null)
             _animator.SetBool(IsDeadParam, _stats.IsDead);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     private void Update()
