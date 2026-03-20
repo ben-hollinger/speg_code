@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour, ICombatant
     private PlayerMovement _movement;
     private PlayerStats _stats;
     private Animator _animator;
+    private GrappleController _grappleController;
 
     private bool _isBusy;
     private bool _wasDead;
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         _movement = GetComponent<PlayerMovement>();
         _stats = GetComponent<PlayerStats>();
         _animator = GetComponentInChildren<Animator>();
+        _grappleController = GetComponent<GrappleController>();
         _wasDead = _stats.IsDead;
 
         if (_animator != null)
@@ -115,6 +117,7 @@ public class PlayerController : MonoBehaviour, ICombatant
     {
         if (mouse == null) return;
         if (!_movement.IsGrounded) return;
+        if (_grappleController != null && _grappleController.IsGrappling) return;
 
         // Start attack chain
         if (!_isBusy && mouse.leftButton.wasPressedThisFrame)
