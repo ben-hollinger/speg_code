@@ -253,6 +253,11 @@ public class PlayerController : MonoBehaviour, ICombatant
         AudioManager.Instance.PlaySfx(_footstepSoundClips[Random.Range(0, _footstepSoundClips.Length)]);
     }
 
+    private void PlaySound(AudioClip clip)
+    {
+        AudioManager.Instance.PlaySfx(clip);
+    }
+
     // ICombatant
     public int GetAttackPower() => _meleeDamage;
     public void TakeDamage(int amount) => _stats.TakeDamage(amount);
