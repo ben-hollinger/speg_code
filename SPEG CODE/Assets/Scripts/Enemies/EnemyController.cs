@@ -5,12 +5,14 @@ public class EnemyController : MonoBehaviour, ICombatant
     [SerializeField] private EnemyData _enemyData;
     [SerializeField] private Animator _animator;
     [SerializeField] private BulletEmitter _bulletEmitter;
+    [SerializeField] private Transform _targetPlayer;
     private int _currentHealth;
     private bool _isDefeated;
     private float _nextAttackTime;
     private bool _isAttacking;
     private bool _wasInAttackState;
     private bool _attackRequested;
+    private bool _wasPlayerInAggro;
 
     [Header("Attacks")]
     [SerializeField] private int _attackCount = 2;
@@ -28,6 +30,10 @@ public class EnemyController : MonoBehaviour, ICombatant
         if (_bulletEmitter == null) _bulletEmitter = GetComponent<BulletEmitter>();
     }
 
+    private void Start() {
+        _targetPlayer = PlayerController.Instance.transform;
+    }
+
     private void Update()
     {
         if (_isDefeated || _enemyData == null) return;
@@ -43,10 +49,54 @@ public class EnemyController : MonoBehaviour, ICombatant
             _wasInAttackState = isInAttackState;
         }
 
+        bool playerInAggro = IsPlayerInAggroCylinder(_targetPlayer.position);
+        if (playerInAggro && !_wasPlayerInAggro)
+        {
+            _nextAttackTime = Time.time + _enemyData.AttackInterval;
+        }
+
+        if (!playerInAggro)
+        {
+            if (!_isAttacking)
+            {
+                _attackRequested = false;
+            }
+            _wasPlayerInAggro = false;
+            return;
+        }
+        _wasPlayerInAggro = true;
+
+        if (!_isAttacking && !_attackRequested)
+        {
+            FaceTarget(_targetPlayer.position);
+        }
+
         if (!_isAttacking && !_attackRequested && Time.time >= _nextAttackTime && _attackCount > 0)
         {
             TriggerNextAttack();
         }
+    }
+
+    private bool IsPlayerInAggroCylinder(Vector3 playerPosition)
+    {
+        Vector3 toPlayer = playerPosition - transform.position;
+        float horizontalDistance = new Vector2(toPlayer.x, toPlayer.z).magnitude;
+        float verticalDistance = Mathf.Abs(toPlayer.y);
+
+        return horizontalDistance <= _enemyData.AggroRadius && verticalDistance <= _enemyData.AggroHeight;
+    }
+
+    private void FaceTarget(Vector3 targetPosition)
+    {
+        Vector3 flatToTarget = targetPosition - transform.position;
+        flatToTarget.y = 0f;
+        if (flatToTarget.sqrMagnitude <= 0.0001f)
+        {
+            return;
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(flatToTarget.normalized, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _enemyData.TurnSpeed * Time.deltaTime);
     }
 
     private void TriggerNextAttack()
