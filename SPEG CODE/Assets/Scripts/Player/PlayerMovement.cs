@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _moveInput;
     private float _verticalVelocity;
     private bool _isFrozen;
+    private Vector3 _grappleMotion;
 
     public Vector3 MoveInput => _moveInput;
     public bool IsGrounded => _cc != null && _cc.isGrounded;
@@ -26,6 +27,11 @@ public class PlayerMovement : MonoBehaviour
     public void SetFrozen(bool frozen)
     {
         _isFrozen = frozen;
+    }
+
+    public void SetGrappleMotion(Vector3 motion)
+    {
+        _grappleMotion = motion;
     }
 
     public bool TryJump()
@@ -48,6 +54,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (_grappleMotion.sqrMagnitude > 0.001f)
+        {
+            _verticalVelocity = 0f;
+            _cc.Move(_grappleMotion * Time.deltaTime);
+            return;
+        }
+
         if (!_isFrozen && _moveInput.sqrMagnitude > 0.001f)
         {
             Quaternion target = Quaternion.LookRotation(_moveInput.normalized, Vector3.up);

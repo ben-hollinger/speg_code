@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour, ICombatant
     [SerializeField] private Slider _healthBarSlider;
     private int _currentHealth;
     private bool _isDefeated;
+    private bool _isGrappleFrozen;
     private float _nextAttackTime;
     private bool _isAttacking;
     private bool _wasInAttackState;
@@ -43,7 +44,7 @@ public class EnemyController : MonoBehaviour, ICombatant
     private void Update()
     {
         UpdateHealthBar();
-        if (_isDefeated || _enemyData == null) return;
+        if (_isDefeated || _enemyData == null || _isGrappleFrozen) return;
 
         if (_animator != null)
         {
@@ -61,7 +62,6 @@ public class EnemyController : MonoBehaviour, ICombatant
         {
             _nextAttackTime = Time.time + _enemyData.AttackInterval;
         }
-
         if (!playerInAggro)
         {
             if (!_isAttacking)
@@ -140,6 +140,11 @@ public class EnemyController : MonoBehaviour, ICombatant
         _isAttacking = false;
         _attackRequested = false;
         _nextAttackTime = Time.time + _enemyData.AttackInterval;
+    }
+
+    public void SetGrappleFrozen(bool frozen)
+    {
+        _isGrappleFrozen = frozen;
     }
 
     public int GetAttackPower()
