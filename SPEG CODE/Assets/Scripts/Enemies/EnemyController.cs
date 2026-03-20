@@ -186,6 +186,8 @@ public class EnemyController : MonoBehaviour, ICombatant
         {
             _animator.SetTrigger("Death");
         }
+
+        AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
     }
 }
 
