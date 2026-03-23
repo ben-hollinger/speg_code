@@ -862,7 +862,7 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 9100000}
   - m_Name: VerticalVelocity
     m_Type: 1
@@ -1356,7 +1356,7 @@ AnimatorStateMachine:
     m_Position: {x: -270, y: 280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7445818360866876193}
-    m_Position: {x: -190, y: 370, z: 0}
+    m_Position: {x: -220, y: 380, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4200432672273366378}
     m_Position: {x: -280, y: 90, z: 0}
