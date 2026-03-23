@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,25 +8,18 @@ public class PuzzleChecker : MonoBehaviour
 {
     private PuzzleSlot[] slots;
     private bool isSolved = false;
-    private void Awake()
-    {
-      
-    }
+ 
     void Start()
     {
-        StartCoroutine(StartAfterDelay());
-
+        setColor();
+        slots = FindObjectsByType<PuzzleSlot>(FindObjectsSortMode.None);
+        slots[0].setNeedsFilled(true);
+        slots[24].setNeedsFilled(true);
     }
-
-    IEnumerator StartAfterDelay(){
-        yield return new WaitForSeconds(1f); // wait 1 second
-
-        Debug.Log("Started after delay");
-        slots = FindObjectsOfType<PuzzleSlot>();  
-    }
+    
     void Update()
     {
-        if (slots[24].getIsFilled() && slots[0].getIsFilled())
+        if (slots.All(slot => slot.getIsFilled() == slot.getNeedsFilled()))
         {
             isSolved = true;
         }
