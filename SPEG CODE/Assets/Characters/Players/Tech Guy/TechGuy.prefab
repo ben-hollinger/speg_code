@@ -1031,6 +1031,7 @@ MonoBehaviour:
   _grappleRange: 12
   _pullSpeed: 10
   _arrivalDistance: 1.5
+  _grappleTimeoutSeconds: 1.3
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
