@@ -25,7 +25,7 @@
 
         void Start()
         {
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             interactPromptUI.SetActive(false);
             dialogueUI.SetActive(false);
         }
