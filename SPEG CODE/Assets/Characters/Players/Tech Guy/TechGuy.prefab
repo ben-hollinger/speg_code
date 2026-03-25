@@ -1001,7 +1001,7 @@ MonoBehaviour:
   _displayName: Player
   _meleeHitPoint: {fileID: 0}
   _meleeRadius: 1.5
-  _meleeDamage: 8
+  _meleeDamage: 15
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 128
