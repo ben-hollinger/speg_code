@@ -4,6 +4,8 @@ using System.Collections;
 
 public class XPBar : MonoBehaviour
 {
+    public static XPBar Instance { get; private set; }
+
     public Slider xpSlider;
     public Text levelText;
     public Text xpText;
@@ -12,10 +14,20 @@ public class XPBar : MonoBehaviour
     [Header("XP Settings")] public int currentLevel = 1;
     public float currentXP = 0f;
     public float xpToNextLevel = 100f;
+    [SerializeField] private float xpPerEnemyKill = 25f;
 
     public float xpScalingFactor = 1.25f;
-
     public float fillAnimationSpeed = 2f;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     void Start()
     {

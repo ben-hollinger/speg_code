@@ -207,6 +207,11 @@ public class EnemyController : MonoBehaviour, ICombatant
 
         AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
 
+        if (XPBar.Instance != null)
+        {
+            XPBar.Instance.AddXP(_enemyData.XPReward);
+        }
+
         UpdateHealthBar();
     }
 
