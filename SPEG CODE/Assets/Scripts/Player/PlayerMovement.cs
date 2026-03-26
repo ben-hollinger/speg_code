@@ -80,4 +80,14 @@ public class PlayerMovement : MonoBehaviour
         _verticalVelocity = 0f;
         _cc.Move(_grappleMotion * Time.fixedDeltaTime);
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        var hazard = hit.gameObject.GetComponentInParent<Hazard>();
+        if (hazard != null)
+        {
+            _verticalVelocity = 0f;
+            hazard.HandleControllerHit(gameObject);
+        }
+    }
 }

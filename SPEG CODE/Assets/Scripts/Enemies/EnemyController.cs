@@ -212,7 +212,7 @@ public class EnemyController : MonoBehaviour, ICombatant
             XPBar.Instance.AddXP(_enemyData.XPReward);
         }
 
-        UpdateHealthBar();
+        _healthBarSlider.gameObject.SetActive(false);
     }
 
     private void UpdateHealthBar()
