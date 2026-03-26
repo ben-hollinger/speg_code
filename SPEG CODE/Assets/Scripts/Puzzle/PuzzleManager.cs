@@ -27,10 +27,7 @@ public class PuzzleManager : MonoBehaviour
     
     void Update()
     {
-        if (slots.All(slot => slot.isSolved()))
-        {
-            isSolved = true;
-        }
+        CheckPuzzle();
         setColor();
     }
 
@@ -43,6 +40,30 @@ public class PuzzleManager : MonoBehaviour
         else
         {
             GetComponent<TextMeshProUGUI>().color = Color.red;
+        }
+    }
+
+    public void CheckPuzzle()
+    {
+        if(isSolved){return;}
+
+        if (slots.All(slot => slot.isSolved()))
+        {
+            isSolved = true;
+            //give key here
+            DisableUI();
+        }
+    }
+    
+    private void DisableUI()
+    {
+        var uiElements = GetComponentsInChildren<CanvasGroup>();
+
+        foreach (var ui in uiElements)
+        {
+            ui.alpha = 0;
+            ui.interactable = false;
+            ui.blocksRaycasts = false;
         }
     }
     
