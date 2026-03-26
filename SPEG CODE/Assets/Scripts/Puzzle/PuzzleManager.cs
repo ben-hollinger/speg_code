@@ -4,22 +4,34 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PuzzleChecker : MonoBehaviour
+public class PuzzleManager : MonoBehaviour
 {
     private PuzzleSlot[] slots;
     private bool isSolved = false;
- 
+
+    void Awake()
+    {
+       
+    }
+
     void Start()
     {
         setColor();
-        slots = FindObjectsByType<PuzzleSlot>(FindObjectsSortMode.None);
+        slots = FindObjectsByType<PuzzleSlot>(FindObjectsSortMode.InstanceID); 
         slots[0].setNeedsFilled(true);
+        slots[0].GetComponent<Image>().color = Color.red;
         slots[24].setNeedsFilled(true);
+        slots[24].GetComponent<Image>().color = Color.red;
+        
+        Debug.Log(slots[0].getNeedsFilled());
+        Debug.Log(slots[24].getNeedsFilled());
+        Debug.Log(slots[1].getNeedsFilled());
+        Debug.Log(slots[1].isSolved());
     }
     
     void Update()
     {
-        if (slots.All(slot => slot.getIsFilled() == slot.getNeedsFilled()))
+        if (slots[24].getIsFilled() && slots[0].getIsFilled())
         {
             isSolved = true;
         }
@@ -27,6 +39,11 @@ public class PuzzleChecker : MonoBehaviour
         {
             isSolved = false;
         }
+
+        /*if (slots.All(slot => slot.isSolved()))
+        {
+            isSolved = true;
+        }*/
         setColor();
     }
 
@@ -41,4 +58,5 @@ public class PuzzleChecker : MonoBehaviour
             GetComponent<TextMeshProUGUI>().color = Color.red;
         }
     }
+    
 }
