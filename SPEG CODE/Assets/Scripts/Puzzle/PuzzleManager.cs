@@ -23,27 +23,14 @@ public class PuzzleManager : MonoBehaviour
         slots[24].setNeedsFilled(true);
         slots[24].GetComponent<Image>().color = Color.red;
         
-        Debug.Log(slots[0].getNeedsFilled());
-        Debug.Log(slots[24].getNeedsFilled());
-        Debug.Log(slots[1].getNeedsFilled());
-        Debug.Log(slots[1].isSolved());
     }
     
     void Update()
     {
-        if (slots[24].getIsFilled() && slots[0].getIsFilled())
+        if (slots.All(slot => slot.isSolved()))
         {
             isSolved = true;
         }
-        else
-        {
-            isSolved = false;
-        }
-
-        /*if (slots.All(slot => slot.isSolved()))
-        {
-            isSolved = true;
-        }*/
         setColor();
     }
 
