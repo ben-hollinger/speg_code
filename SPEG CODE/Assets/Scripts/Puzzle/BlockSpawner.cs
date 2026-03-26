@@ -20,10 +20,7 @@ public class BlockSpawner : MonoBehaviour, IPointerDownHandler ,IBeginDragHandle
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("slot 1: "+slots[0].isSolved());
-        Debug.Log("slot 1 need: "+slots[0].getNeedsFilled());
-        Debug.Log("slot 1 is: "+slots[0].getIsFilled());
-        Debug.Log("slot 2: "+slots[24].isSolved());
+        
     }
 
     public void OnBeginDrag(PointerEventData eventData)

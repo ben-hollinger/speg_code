@@ -11,16 +11,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {rectTransform=GetComponent<RectTransform>();
     canvasGroup=GetComponent<CanvasGroup>();
     }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    
 
     public void OnPointerDown(PointerEventData eventData)
     {
