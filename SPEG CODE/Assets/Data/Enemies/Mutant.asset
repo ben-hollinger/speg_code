@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   _enemyName: Mutant
   _maxHealth: 100
+  _XPReward: 100
   _attackInterval: 1
   _aggroRadius: 9
   _aggroHeight: 2
