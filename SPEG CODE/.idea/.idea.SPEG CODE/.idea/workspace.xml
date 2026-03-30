@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a933986-75e0-4b75-bb90-b7c7ba3b5e38" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Puzzle/PuzzleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Puzzle/PuzzleManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/ChestPuzzle.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/ChestPuzzle.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +92,7 @@
       <workItem from="1772663369577" duration="4000" />
       <workItem from="1774178210612" duration="5000" />
       <workItem from="1774178822717" duration="3686000" />
-      <workItem from="1774457372349" duration="11799000" />
+      <workItem from="1774457372349" duration="13290000" />
     </task>
     <servers />
   </component>
