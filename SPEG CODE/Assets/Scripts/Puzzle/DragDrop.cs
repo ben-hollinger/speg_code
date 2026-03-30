@@ -11,18 +11,11 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {rectTransform=GetComponent<RectTransform>();
     canvasGroup=GetComponent<CanvasGroup>();
     }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
     
-    public void OnPointerDown(PointerEventData eventData){}
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -38,16 +31,19 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
 
         transform.SetParent(transform.root); // move to top canvas while dragging
         
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
+        
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition+=eventData.delta;
+        
     }
    
     
