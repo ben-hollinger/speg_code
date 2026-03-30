@@ -6,6 +6,7 @@ public class EnemyData : ScriptableObject
     [Header("Enemy")]
     [SerializeField] private string _enemyName;
     [SerializeField] private int _maxHealth = 10;
+    [SerializeField] private int _XPReward = 10;
     [SerializeField] private float _attackInterval = 2f;
 
     [Header("Targeting")]
@@ -20,6 +21,7 @@ public class EnemyData : ScriptableObject
 
     public string EnemyName => _enemyName;
     public int MaxHealth => _maxHealth;
+    public int XPReward => _XPReward;
     public float AttackInterval => _attackInterval;
     public float AggroRadius => _aggroRadius;
     public float AggroHeight => _aggroHeight;

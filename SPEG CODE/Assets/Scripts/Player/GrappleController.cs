@@ -7,6 +7,7 @@ public class GrappleController : MonoBehaviour
     [SerializeField] private float _grappleRange = 12f;
     [SerializeField] private float _pullSpeed = 10f;
     [SerializeField] private float _arrivalDistance = 1.5f;
+    [SerializeField] private float _grappleTimeoutSeconds = 3f;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private LayerMask _enemyLayer;
 
@@ -21,6 +22,7 @@ public class GrappleController : MonoBehaviour
     private GrappleState _state = GrappleState.Idle;
     private Vector3 _grappleTargetPoint;
     private EnemyController _grappledEnemy;
+    private float _grappleStartTime;
 
     private PlayerMovement _movement;
     private Animator _animator;
@@ -40,13 +42,18 @@ public class GrappleController : MonoBehaviour
         if (_state == GrappleState.Idle && Mouse.current.rightButton.wasPressedThisFrame)
             BeginGrappleShoot();
 
-        UpdatePull();
         UpdateLineRenderer();
+    }
+
+    private void FixedUpdate()
+    {
+        UpdatePull();
     }
 
     private void BeginGrappleShoot()
     {
         _state = GrappleState.Shooting;
+        _grappleStartTime = Time.time;
         _movement.SetFrozen(true);
         if (_animator != null)
         {
@@ -98,6 +105,12 @@ public class GrappleController : MonoBehaviour
 
     private void UpdatePull()
     {
+        if (_state != GrappleState.Idle && Time.time - _grappleStartTime >= _grappleTimeoutSeconds)
+        {
+            FinishGrapple();
+            return;
+        }
+
         if (_state == GrappleState.PullingToWall)
         {
             Vector3 dir = _grappleTargetPoint - transform.position;
@@ -123,7 +136,7 @@ public class GrappleController : MonoBehaviour
                 return;
             }
 
-            _grappledEnemy.transform.position += dir.normalized * _pullSpeed * Time.deltaTime;
+            _grappledEnemy.transform.position += dir.normalized * _pullSpeed * Time.fixedDeltaTime;
             _grappleTargetPoint = _grappledEnemy.transform.position + Vector3.up;
         }
     }

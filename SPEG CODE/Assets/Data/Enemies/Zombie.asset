@@ -1,23 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8debe82d35f09ad2f83e2344dcc201c0, type: 3}
-  m_Name: Zombie
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  _enemyName: Zombie
-  _maxHealth: 100
-  _attackInterval: 1
-  _aggroRadius: 9
-  _aggroHeight: 2
-  _turnSpeed: 360
-  _modelPrefab: {fileID: 0}
-  _deathAnimation: {fileID: 0}
-  _deathSfx: {fileID: 8300000, guid: 093a5dc60018d476791de718279859f3, type: 3}
+version https://git-lfs.github.com/spec/v1
+oid sha256:be95d2dcfdb7af1525f7cd3bd508282da6ddf6cff7968d7ced2dc6857a65685a
+size 691
