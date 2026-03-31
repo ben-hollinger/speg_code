@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour, IDamageable
 {
+    public delegate void PlayerDiedHandler();
+    public event PlayerDiedHandler PlayerDied;
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private AudioClip[] _damageGruntClips;
 
@@ -51,6 +53,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
     private void Die()
     {
         _isDead = true;
+        PlayerDied?.Invoke();
     }
 
     private void NotifyHealthChanged()
