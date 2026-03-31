@@ -15,7 +15,7 @@ MonoBehaviour:
   _enemyName: Mutant
   _maxHealth: 100
   _XPReward: 100
-  _attackInterval: 1
+  _attackInterval: 0.6
   _aggroRadius: 9
   _aggroHeight: 2
   _turnSpeed: 360
