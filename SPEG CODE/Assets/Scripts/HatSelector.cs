@@ -13,7 +13,7 @@ public class HatSelector : MonoBehaviour
     //   4 = Magic Blast + Double Jump + Dashing Strike + Shield
     //   5 = All abilities (+ Grapple)
     // ═════════════════════════════════════════════════════════════════════════
-    private const int CURRENT_LEVEL = 4;
+    private const int CURRENT_LEVEL = 4; //change this to level number 
 
     [Header("Hat Panel UI")]
     public GameObject hatPanel;
