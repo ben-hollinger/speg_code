@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour, ICombatant
     public int MaxHealth => _stats.MaxHealth;
     public bool IsDead => _stats.IsDead;
 
+    public static bool IsAliveForEnemies => Instance != null && !Instance.IsDead;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
