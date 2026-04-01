@@ -180,7 +180,7 @@ public class HazardDamage : MonoBehaviour
         if (stats != null)
         {
             stats.TakeDamage(Mathf.RoundToInt(damage));
-            Debug.Log($"[HazardDamage] Hit player for {Mathf.RoundToInt(damage)}. HP: {stats.CurrentHealth}/{stats.MaxHealth}");
+            //Debug.Log($"[HazardDamage] Hit player for {Mathf.RoundToInt(damage)}. HP: {stats.CurrentHealth}/{stats.MaxHealth}");
         }
         else
         {
