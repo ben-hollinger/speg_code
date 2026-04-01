@@ -57,6 +57,13 @@ public class EnemyController : MonoBehaviour, ICombatant
             _wasInAttackState = isInAttackState;
         }
 
+        if (!PlayerController.IsAliveForEnemies)
+        {
+            _attackRequested = false;
+            _wasPlayerInAggro = false;
+            return;
+        }
+
         bool playerInAggro = IsPlayerInAggroCylinder(_targetPlayer.position);
         if (playerInAggro && !_wasPlayerInAggro)
         {

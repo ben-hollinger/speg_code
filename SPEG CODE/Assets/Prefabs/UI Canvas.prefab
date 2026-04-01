@@ -435,15 +435,15 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 1cc10549fba70907498b6d73d61c18bf, type: 3}
-    m_FontSize: 118
+    m_FontSize: 135
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 118
+    m_MaxSize: 135
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
@@ -460,7 +460,6 @@ GameObject:
   - component: {fileID: 6020634627447372655}
   - component: {fileID: 2649601985725418480}
   - component: {fileID: 8997535778757858857}
-  - component: {fileID: 2614004747184970436}
   - component: {fileID: 6643334076873196308}
   - component: {fileID: 3668477786856608447}
   m_Layer: 0
@@ -576,24 +575,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &2614004747184970436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6502339146313250770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1041a3415f70499629f2a00a8eb94e64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHeartsUI
-  _playerStats: {fileID: 0}
-  _heartsContainer: {fileID: 0}
-  _heartTemplate: {fileID: 0}
-  _fullHeartSprite: {fileID: 21300000, guid: 71f483018fe1dd244aaea8b9556bb291, type: 3}
-  _emptyHeartSprite: {fileID: 21300000, guid: 708212dd2bddcb280ad72e6aae253c77, type: 3}
-  _healthPerHeart: 1
 --- !u!114 &6643334076873196308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,7 +587,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4403ad951c7dec613bd57b745dac3346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeathScreenUI
-  _playerStats: {fileID: 0}
+  _playerStats: {fileID: 3587620608251188854, guid: 959d187eb3c65054eaa8345a4307f844, type: 3}
+  _statsPanel: {fileID: 429519340853352665}
   _overlayGroup: {fileID: 8508147562411928579}
   _messageText: {fileID: 2633667822387014948}
   _restartButton: {fileID: 109189805739927064}
@@ -631,8 +613,8 @@ MonoBehaviour:
   _xpLineText: {fileID: 7328395118520397740}
   _threadLineText: {fileID: 8880632801009171973}
   _xpBar: {fileID: 2603191707851847393}
-  _playerStats: {fileID: 0}
-  _barSegmentCount: 21
+  _playerStats: {fileID: 3587620608251188854, guid: 959d187eb3c65054eaa8345a4307f844, type: 3}
+  _barSegmentCount: 20
   _xpFilledColor: '#4FA8FF'
   _xpEmptyColor: '#1A1F2E'
   _healthPerHeart: 1

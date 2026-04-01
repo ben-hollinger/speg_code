@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DeathScreenUI : MonoBehaviour
 {
     [SerializeField] private PlayerStats _playerStats;
+    [SerializeField] private GameObject _statsPanel;
     [SerializeField] private CanvasGroup _overlayGroup;
     [SerializeField] private Text _messageText;
     [SerializeField] private Button _restartButton;
@@ -48,6 +49,12 @@ public class DeathScreenUI : MonoBehaviour
     {
         if (_shown) return;
         _shown = true;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.FadeOutMusic(_fadeDuration);
+
+        _statsPanel.SetActive(false);
+
         StartCoroutine(ShowDeathSequence());
     }
 
