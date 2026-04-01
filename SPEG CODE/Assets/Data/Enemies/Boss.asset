@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8debe82d35f09ad2f83e2344dcc201c0, type: 3}
-  m_Name: Mutant
+  m_Name: Boss
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  _enemyName: Mutant
-  _maxHealth: 100
-  _XPReward: 100
-  _attackInterval: 0.3
-  _aggroRadius: 10
-  _aggroHeight: 2
+  _enemyName: Boss
+  _maxHealth: 500
+  _XPReward: 1200
+  _attackInterval: 0.4
+  _aggroRadius: 16
+  _aggroHeight: 6
   _turnSpeed: 360
   _modelPrefab: {fileID: 0}
   _deathAnimation: {fileID: 0}
