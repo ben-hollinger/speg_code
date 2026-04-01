@@ -3,7 +3,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, ICombatant
 {
-    [SerializeField] private PlayerCharacterData _characterData;
+    public static PlayerController Instance { get; private set; }
+
+    [Header("Identity")]
+    [SerializeField] private string _displayName = "Player";
 
     [Header("Melee")]
     [SerializeField] private Transform _meleeHitPoint;
@@ -15,6 +18,10 @@ public class PlayerController : MonoBehaviour, ICombatant
     [SerializeField, Range(0f, 1f)] private float _comboWindowStart = 0.45f;
     [SerializeField, Range(0f, 1f)] private float _comboWindowEnd = 0.90f;
 
+    [Header("Weapon Pose Targets")]
+    [SerializeField] private GameObject _armedWeaponPos;
+    [SerializeField] private GameObject _unarmedWeaponPos;
+
     [Header("SFX")]
     [SerializeField] private AudioClip _attackSoundClip;
     [SerializeField] private AudioClip _attackHitSoundClip;
@@ -23,37 +30,56 @@ public class PlayerController : MonoBehaviour, ICombatant
     private PlayerMovement _movement;
     private PlayerStats _stats;
     private Animator _animator;
+    private GrappleController _grappleController;
 
     private bool _isBusy;
     private bool _wasDead;
 
     private int _comboQueuedFromHash;
 
-    private static readonly int MoveSpeedParam  = Animator.StringToHash("MoveSpeed");
-    private static readonly int IsDeadParam      = Animator.StringToHash("IsDead");
-    private static readonly int AttackTrigger    = Animator.StringToHash("Attack");
-    private static readonly int ComboTrigger     = Animator.StringToHash("Combo");
-    private static readonly int IdleHash         = Animator.StringToHash("Idle");
-    private static readonly int RunHash          = Animator.StringToHash("Run");
-    private static readonly int InwardSlashHash  = Animator.StringToHash("Inward Slash");
+    private static readonly int MoveSpeedParam = Animator.StringToHash("MoveSpeed");
+    private static readonly int IsDeadParam = Animator.StringToHash("IsDead");
+    private static readonly int IsGroundedParam = Animator.StringToHash("IsGrounded");
+    private static readonly int VerticalVelocityParam = Animator.StringToHash("VerticalVelocity");
+    private static readonly int JumpTrigger = Animator.StringToHash("Jump");
+    private static readonly int AttackTrigger = Animator.StringToHash("Attack");
+    private static readonly int ComboTrigger = Animator.StringToHash("Combo");
+    private static readonly int IdleHash = Animator.StringToHash("Idle");
+    private static readonly int RunHash = Animator.StringToHash("Run");
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
+    private static readonly int AttackTagHash = Animator.StringToHash("attack");
+    private static readonly int InwardSlashHash = Animator.StringToHash("Inward Slash");
     private static readonly int OutwardSlashHash = Animator.StringToHash("Outward Slash");
 
-    public string DisplayName  => _characterData != null ? _characterData.characterName : "Player";
-    public int CurrentHealth   => _stats.CurrentHealth;
-    public int MaxHealth       => _stats.MaxHealth;
-    public bool IsDead         => _stats.IsDead;
+    public string DisplayName => _displayName;
+    public int CurrentHealth => _stats.CurrentHealth;
+    public int MaxHealth => _stats.MaxHealth;
+    public bool IsDead => _stats.IsDead;
 
     private void Awake()
     {
-        _movement  = GetComponent<PlayerMovement>();
-        _stats     = GetComponent<PlayerStats>();
-        _animator  = GetComponentInChildren<Animator>();
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("Multiple PlayerController instances found. Replacing previous instance.");
+        }
+        Instance = this;
 
-        _movement.SetMovement(_characterData.moveSpeed, _characterData.gravity);
+        _movement = GetComponent<PlayerMovement>();
+        _stats = GetComponent<PlayerStats>();
+        _animator = GetComponentInChildren<Animator>();
+        _grappleController = GetComponent<GrappleController>();
         _wasDead = _stats.IsDead;
 
         if (_animator != null)
             _animator.SetBool(IsDeadParam, _stats.IsDead);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     private void Update()
@@ -73,8 +99,9 @@ public class PlayerController : MonoBehaviour, ICombatant
         }
 
         MaybeUnfreezeOnLocomotionTransition();
-
+        MaybeRecoverFromStuckBusy();
         UpdateAnimator();
+        UpdateWeaponPoseTargets();
     }
 
     private void HandleMoveInput(Keyboard kb)
@@ -84,11 +111,16 @@ public class PlayerController : MonoBehaviour, ICombatant
         float h = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f);
         float v = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f);
         _movement.SetMoveInput(new Vector2(h, v).normalized);
+
+        if (kb.spaceKey.wasPressedThisFrame && _movement.TryJump() && _animator != null)
+            _animator.SetTrigger(JumpTrigger);
     }
 
     private void HandleCombatInput(Mouse mouse)
     {
         if (mouse == null) return;
+        if (!_movement.IsGrounded) return;
+        if (_grappleController != null && _grappleController.IsGrappling) return;
 
         // Start attack chain
         if (!_isBusy && mouse.leftButton.wasPressedThisFrame)
@@ -132,6 +164,26 @@ public class PlayerController : MonoBehaviour, ICombatant
         _animator.ResetTrigger(ComboTrigger);
     }
 
+    private void MaybeRecoverFromStuckBusy()
+    {
+        if (!_isBusy) return;
+        if (_animator == null) return;
+
+        AnimatorStateInfo current = _animator.GetCurrentAnimatorStateInfo(0);
+        if (IsAttackState(current)) return;
+
+        if (_animator.IsInTransition(0))
+        {
+            AnimatorStateInfo next = _animator.GetNextAnimatorStateInfo(0);
+            if (IsAttackState(next)) return;
+        }
+
+        _isBusy = false;
+        _movement.SetFrozen(false);
+        _comboQueuedFromHash = 0;
+        _animator.ResetTrigger(ComboTrigger);
+    }
+
     public void OnAttackStateEntered()
     {
         _isBusy = true;
@@ -145,7 +197,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         if (_animator != null)
         {
             var current = _animator.GetCurrentAnimatorStateInfo(0);
-            if (IsSlashState(current.shortNameHash)) return;
+            if (IsAttackState(current)) return;
         }
 
         _isBusy = false;
@@ -162,24 +214,55 @@ public class PlayerController : MonoBehaviour, ICombatant
         foreach (var hit in hits)
         {
             var dmg = hit.GetComponentInParent<IDamageable>();
-            if (dmg != null && !dmg.IsDead) {
+            if (dmg != null && !dmg.IsDead)
+            {
                 dmg.TakeDamage(_meleeDamage);
                 AudioManager.Instance.PlaySfx(_attackHitSoundClip);
                 return;
             }
         }
+
         AudioManager.Instance.PlaySfx(_attackSoundClip);
     }
 
-    private static bool IsSlashState(int hash) => hash == InwardSlashHash || hash == OutwardSlashHash;
+    private void UpdateWeaponPoseTargets()
+    {
+        bool isIdle = false;
+        if (_animator != null)
+        {
+            AnimatorStateInfo current = _animator.GetCurrentAnimatorStateInfo(0);
+            isIdle = current.shortNameHash == IdleHash;
 
+            if (!isIdle && _animator.IsInTransition(0))
+            {
+                AnimatorStateInfo next = _animator.GetNextAnimatorStateInfo(0);
+                isIdle = next.shortNameHash == IdleHash;
+            }
+        }
+
+        bool useArmed = _isBusy;
+
+        if (_armedWeaponPos != null && _armedWeaponPos.activeSelf != useArmed) _armedWeaponPos.SetActive(useArmed);
+
+        if (_unarmedWeaponPos != null)
+        {
+            bool useUnarmed = !useArmed;
+            if (_unarmedWeaponPos.activeSelf != useUnarmed) _unarmedWeaponPos.SetActive(useUnarmed);
+        }
+    }
+
+    private static bool IsSlashState(int hash) => hash == InwardSlashHash || hash == OutwardSlashHash;
     private static bool IsLocomotionState(int hash) => hash == IdleHash || hash == RunHash;
+    private static bool IsAttackState(AnimatorStateInfo stateInfo) => stateInfo.shortNameHash == AttackHash || IsSlashState(stateInfo.shortNameHash) || stateInfo.tagHash == AttackTagHash;
 
     private void UpdateAnimator()
     {
         if (_animator == null) return;
+
         _animator.SetFloat(MoveSpeedParam, _movement.MoveInput.magnitude);
         _animator.SetBool(IsDeadParam, _stats.IsDead);
+        _animator.SetBool(IsGroundedParam, _movement.IsGrounded);
+        _animator.SetFloat(VerticalVelocityParam, _movement.VerticalVelocity);
     }
 
     private void HandleDeath()
@@ -187,6 +270,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         _isBusy = false;
         _movement.SetFrozen(false);
         _movement.SetMoveInput(Vector2.zero);
+
         if (_animator != null)
             _animator.SetBool(IsDeadParam, true);
     }
@@ -194,6 +278,11 @@ public class PlayerController : MonoBehaviour, ICombatant
     private void PlayFootstepSound()
     {
         AudioManager.Instance.PlaySfx(_footstepSoundClips[Random.Range(0, _footstepSoundClips.Length)]);
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        AudioManager.Instance.PlaySfx(clip);
     }
 
     // ICombatant
