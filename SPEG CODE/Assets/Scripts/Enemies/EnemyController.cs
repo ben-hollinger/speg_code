@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour, ICombatant
     [SerializeField] private Transform _targetPlayer;
 
     [Header("UI")]
-    [SerializeField] private Slider _healthBarSlider;
+    public Slider _healthBarSlider;
     private int _currentHealth;
     private bool _isDefeated;
     private bool _isGrappleFrozen;
@@ -209,9 +209,6 @@ public class EnemyController : MonoBehaviour, ICombatant
             _animator.SetTrigger("Death");
         }
 
-        gameObject.GetComponent<Collider>().enabled = false;
-        gameObject.GetComponent<Rigidbody>().isKinematic = true;
-
         AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
 
         if (XPBar.Instance != null)
@@ -220,6 +217,9 @@ public class EnemyController : MonoBehaviour, ICombatant
         }
 
         _healthBarSlider.gameObject.SetActive(false);
+
+        gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.GetComponent<Rigidbody>().isKinematic = true;
     }
 
     private void UpdateHealthBar()

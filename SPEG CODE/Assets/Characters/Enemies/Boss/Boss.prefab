@@ -459,7 +459,7 @@ GameObject:
   - component: {fileID: 2078933925796962428}
   - component: {fileID: 1045251942280232958}
   - component: {fileID: 6146068000960712334}
-  - component: {fileID: 1527495636032548350}
+  - component: {fileID: 364249654511334431}
   m_Layer: 7
   m_Name: Boss
   m_TagString: Untagged
@@ -562,33 +562,38 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!54 &1527495636032548350
-Rigidbody:
+--- !u!114 &364249654511334431
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583184750700253224}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b19da916930bda2dea0e0e82da220e08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossSequence
+  _animator: {fileID: 9195802588476038896}
+  _enemyController: {fileID: 1045251942280232958}
+  _dialoguePanel: {fileID: 0}
+  _dialogueText: {fileID: 0}
+  _continueHint: {fileID: 0}
+  _dialogueStartRange: 8
+  _advanceKey: 19
+  _fightMusic: {fileID: 8300000, guid: 693f15fb2a3f9195794f2f16b7ef0760, type: 3}
+  _stopMusicFadeDuration: 1
+  _forwardMoveInitialDelay: 1.8
+  _forwardMoveDistance: 6
+  _forwardMoveDuration: 2.2
+  _dialogueLines:
+  - You have arrived. I expected you. The Architect of Ruin was right... the balance
+    was always a lie. A beautiful, fragile lie.
+  - You wear the Crown of Threads. You think you are the hero who will save this
+    world? No, little one. You are merely the final piece of the puzzle. The last
+    line of code needed to complete the system.
+  - I have been waiting for you. The Null Engine is ready. And now... the garbage
+    collection begins.
 --- !u!1 &1671951579262599653
 GameObject:
   m_ObjectHideFlags: 0

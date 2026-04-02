@@ -150,7 +150,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        float finalVolume = Mathf.Clamp01(sfxVolume * volumeMultiplier);
+        float finalVolume = Mathf.Max(0f, sfxVolume * volumeMultiplier);
         sfxSource.PlayOneShot(clip, finalVolume);
     }
 }

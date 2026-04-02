@@ -58,6 +58,22 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     public static bool IsAliveForEnemies => Instance != null && !Instance.IsDead;
 
+    public void SetMovementFrozen(bool frozen)
+    {
+        if (_movement == null) return;
+        if (frozen)
+        {
+            _movement.SetExternalLocomotionLock(true);
+            _movement.SetFrozen(true);
+            _movement.SetMoveInput(Vector2.zero);
+        }
+        else
+        {
+            _movement.SetExternalLocomotionLock(false);
+            _movement.SetFrozen(false);
+        }
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -109,6 +125,11 @@ public class PlayerController : MonoBehaviour, ICombatant
     private void HandleMoveInput(Keyboard kb)
     {
         if (kb == null) return;
+        if (_movement != null && _movement.IsExternalLocomotionLocked())
+        {
+            _movement.SetMoveInput(Vector2.zero);
+            return;
+        }
 
         float h = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f);
         float v = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f);
@@ -270,6 +291,7 @@ public class PlayerController : MonoBehaviour, ICombatant
     private void HandleDeath()
     {
         _isBusy = false;
+        _movement.SetExternalLocomotionLock(false);
         _movement.SetFrozen(false);
         _movement.SetMoveInput(Vector2.zero);
 
