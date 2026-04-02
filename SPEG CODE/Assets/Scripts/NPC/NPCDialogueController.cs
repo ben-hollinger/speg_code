@@ -3,7 +3,7 @@
     using UnityEngine;
     using TMPro;
 
-    public class NPCController : MonoBehaviour
+    public class NPCDialogueController : MonoBehaviour
     {
         [Header("Interaction Settings")]
         public float interactionRange = 3f;
