@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using TMPro;    
 
 public class BossSequence : MonoBehaviour
 {
@@ -10,8 +11,7 @@ public class BossSequence : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private EnemyController _enemyController;
     [SerializeField] private GameObject _dialoguePanel;
-    [SerializeField] private Text _dialogueText;
-    [SerializeField] private GameObject _continueHint;
+    [SerializeField] private TextMeshProUGUI _dialogueText;
 
     [SerializeField] private float _dialogueStartRange = 5f;
     [SerializeField] private Key _advanceKey = Key.E;

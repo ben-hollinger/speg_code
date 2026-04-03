@@ -1436,6 +1436,10 @@ MonoBehaviour:
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  _grappleObjectLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  _objectPullSpeed: 10
   _grappleOrigin: {fileID: 2959697127855666713}
   _lineRenderer: {fileID: 269624315311281598}
 --- !u!120 &269624315311281598

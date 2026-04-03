@@ -11,6 +11,8 @@
 
         [Header("Dialogue")]
         public string[] dialogueLines;
+        public AudioClip[] voiceLines;
+        public float voiceLinesVolume = 1f;
 
         [Header("UI")]
         public GameObject interactPromptUI;   // "Press E to talk" world-space UI
@@ -73,6 +75,7 @@
             animator?.SetBool("isTalking", true);
 
             dialogueText.text = dialogueLines[dialogueIndex];
+            TryPlayVoiceLine(dialogueIndex);
         }
 
         void AdvanceDialogue()
@@ -82,6 +85,7 @@
             if (dialogueIndex < dialogueLines.Length)
             {
                 dialogueText.text = dialogueLines[dialogueIndex];
+                TryPlayVoiceLine(dialogueIndex);
             }
             else
             {
@@ -89,6 +93,13 @@
             }
         }
 
+        void TryPlayVoiceLine(int index)
+        {
+            if (index < 0 || index >= voiceLines.Length) return;
+            if (voiceLines[index] == null) return;
+            AudioManager.Instance.PlaySfx(voiceLines[index], voiceLinesVolume);
+        }
+        
         void EndDialogue()
         {
             isTalking = false;
