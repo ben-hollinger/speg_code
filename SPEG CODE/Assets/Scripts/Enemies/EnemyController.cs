@@ -210,6 +210,7 @@ public class EnemyController : MonoBehaviour, ICombatant
         }
 
         AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
+        GetComponent<BossSequence>()?.OnBossDefeated();
 
         if (XPBar.Instance != null)
         {

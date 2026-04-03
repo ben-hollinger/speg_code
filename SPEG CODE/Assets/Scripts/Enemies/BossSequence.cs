@@ -1,14 +1,16 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class BossSequence : MonoBehaviour
 {
+    public static AudioClip PlayerDeathSfxWhileBossActive;
+
     [SerializeField] private Animator _animator;
     [SerializeField] private EnemyController _enemyController;
     [SerializeField] private GameObject _dialoguePanel;
-    [SerializeField] private TextMeshProUGUI _dialogueText;
+    [SerializeField] private Text _dialogueText;
     [SerializeField] private GameObject _continueHint;
 
     [SerializeField] private float _dialogueStartRange = 5f;
@@ -18,9 +20,11 @@ public class BossSequence : MonoBehaviour
     [SerializeField] private GameObject _sword;
     [SerializeField] private GameObject _healthBar;
     [SerializeField] private AudioClip _fightMusic;
+    [SerializeField] private AudioClip _musicOnBossDefeat;
     [SerializeField] private float _stopMusicFadeDuration = 1f;
     [SerializeField] private AudioClip[] _lineSfx = new AudioClip[3];
     [SerializeField] private float _lineSfxVolume = 1f;
+    [SerializeField] private AudioClip _playerDeathSfxAfterBossStarted;
 
     [SerializeField] private float _forwardMoveInitialDelay = 2f;
     [SerializeField] private float _forwardMoveDistance = 2f;
@@ -126,8 +130,16 @@ public class BossSequence : MonoBehaviour
         }
 
         _enemyController.enabled = true;
+        PlayerDeathSfxWhileBossActive = _playerDeathSfxAfterBossStarted;
         AudioManager.Instance?.PlayMusic(_fightMusic);
         _healthBar.SetActive(true);
+    }
+
+    public void OnBossDefeated()
+    {
+        PlayerDeathSfxWhileBossActive = null;
+        if (_musicOnBossDefeat != null)
+            AudioManager.Instance?.PlayMusic(_musicOnBossDefeat);
     }
 
     public void StartFight()
@@ -148,6 +160,7 @@ public class BossSequence : MonoBehaviour
 
     private void OnDisable()
     {
+        PlayerDeathSfxWhileBossActive = null;
         if (!_playerFrozenForDialogue) return;
         PlayerController.Instance?.SetMovementFrozen(false);
         _playerFrozenForDialogue = false;

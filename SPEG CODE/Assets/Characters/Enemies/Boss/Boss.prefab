@@ -460,6 +460,7 @@ GameObject:
   - component: {fileID: 1045251942280232958}
   - component: {fileID: 6146068000960712334}
   - component: {fileID: 364249654511334431}
+  - component: {fileID: 3523803881007548796}
   m_Layer: 7
   m_Name: Boss
   m_TagString: Untagged
@@ -581,11 +582,6 @@ MonoBehaviour:
   _continueHint: {fileID: 0}
   _dialogueStartRange: 8
   _advanceKey: 19
-  _fightMusic: {fileID: 8300000, guid: 693f15fb2a3f9195794f2f16b7ef0760, type: 3}
-  _stopMusicFadeDuration: 1
-  _forwardMoveInitialDelay: 1.8
-  _forwardMoveDistance: 6
-  _forwardMoveDuration: 2.2
   _dialogueLines:
   - You have arrived. I expected you. The Architect of Ruin was right... the balance
     was always a lie. A beautiful, fragile lie.
@@ -594,6 +590,30 @@ MonoBehaviour:
     line of code needed to complete the system.
   - I have been waiting for you. The Null Engine is ready. And now... the garbage
     collection begins.
+  _sword: {fileID: 0}
+  _healthBar: {fileID: 0}
+  _fightMusic: {fileID: 8300000, guid: 693f15fb2a3f9195794f2f16b7ef0760, type: 3}
+  _stopMusicFadeDuration: 1
+  _lineSfx:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _lineSfxVolume: 1
+  _forwardMoveInitialDelay: 1.8
+  _forwardMoveDistance: 6
+  _forwardMoveDuration: 2.2
+--- !u!114 &3523803881007548796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583184750700253224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb2555331a70fcbf6b7c475ae1defe4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlaySound
 --- !u!1 &1671951579262599653
 GameObject:
   m_ObjectHideFlags: 0

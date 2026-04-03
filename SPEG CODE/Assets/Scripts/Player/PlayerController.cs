@@ -290,6 +290,7 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private void HandleDeath()
     {
+        AudioManager.Instance?.PlaySfx(BossSequence.PlayerDeathSfxWhileBossActive, 4.0f);
         _isBusy = false;
         _movement.SetExternalLocomotionLock(false);
         _movement.SetFrozen(false);
