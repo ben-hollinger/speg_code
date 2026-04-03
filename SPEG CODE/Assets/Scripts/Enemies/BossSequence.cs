@@ -155,7 +155,6 @@ public class BossSequence : MonoBehaviour
     private void SetUi(bool on)
     {
         _dialoguePanel.SetActive(on);
-        _continueHint.SetActive(on);
     }
 
     private void OnDisable()

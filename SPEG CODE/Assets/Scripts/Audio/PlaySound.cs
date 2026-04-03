@@ -8,6 +8,6 @@ public class PlaySound : MonoBehaviour
     }
 
     public void PlaySfxLoud(AudioClip audioClip) {
-        AudioManager.Instance.PlaySfx(audioClip, 4.0f);
+        AudioManager.Instance.PlaySfx(audioClip, 6.0f);
     }
 }

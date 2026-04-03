@@ -64782,6 +64782,13 @@ AnimationClip:
   - time: 0
     functionName: PlaySfxLoud
     data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 358c33433fa52214190037214ce2ecb9, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.3
+    functionName: PlaySfxLoud
+    data: 
     objectReferenceParameter: {fileID: 8300000, guid: 228adf5fb2315495196620c5476066dc, type: 3}
     floatParameter: 0
     intParameter: 0
