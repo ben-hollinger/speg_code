@@ -70,7 +70,10 @@ public class MagicBlastShooter : MonoBehaviour
     private void FireGrapple()
     {
         Vector3 origin = _spawnPoint != null ? _spawnPoint.position : transform.position + Vector3.up;
-        Quaternion facing = Quaternion.LookRotation(transform.right);
+    
+        // Use the animator's transform since that's what actually rotates with movement
+        Vector3 aimDirection = _animator != null ? _animator.transform.forward : transform.forward;
+        Quaternion facing = Quaternion.LookRotation(aimDirection);
 
         GameObject blastObject = Instantiate(_blastPrefab, origin, facing);
         var blastComponent = blastObject.GetComponent<MagicBlast>();
