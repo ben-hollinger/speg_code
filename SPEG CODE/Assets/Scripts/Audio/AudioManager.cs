@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -17,27 +18,85 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private AudioClip currentMusicClip;
 
+    private Coroutine _musicFadeRoutine;
+
     private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance != null && Instance != this)
+            Destroy(Instance.gameObject);
+
+        Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        musicSource = gameObject.AddComponent<AudioSource>();
+        if (musicSource == null)
+            musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.playOnAwake = false;
         musicSource.loop = true;
         musicSource.volume = musicVolume;
         
-        sfxSource = gameObject.AddComponent<AudioSource>();
+        if (sfxSource == null)
+            sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
+        sfxSource.volume = sfxVolume;
 
         if (currentMusicClip != null)
         {
             PlayMusic(currentMusicClip);
         }
     }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
+
+    public void FadeOutMusic(float duration)
+    {
+        if (musicSource == null)
+            return;
+
+        if (_musicFadeRoutine != null)
+            StopCoroutine(_musicFadeRoutine);
+
+        _musicFadeRoutine = StartCoroutine(FadeOutMusicRoutine(duration));
+    }
+
+    private IEnumerator FadeOutMusicRoutine(float duration)
+    {
+        float start = musicSource.volume;
+
+        if (duration <= 0f)
+        {
+            musicSource.volume = 0f;
+            musicSource.Stop();
+            currentMusicClip = null;
+            _musicFadeRoutine = null;
+            yield break;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            musicSource.volume = Mathf.Lerp(start, 0f, elapsed / duration);
+            yield return null;
+        }
+
+        musicSource.volume = 0f;
+        musicSource.Stop();
+        currentMusicClip = null;
+        _musicFadeRoutine = null;
+    }
     
     public void PlayMusic(AudioClip clip)
     {
+        if (_musicFadeRoutine != null)
+        {
+            StopCoroutine(_musicFadeRoutine);
+            _musicFadeRoutine = null;
+        }
+
         if (clip == null)
         {
             StopMusic();
@@ -59,6 +118,12 @@ public class AudioManager : MonoBehaviour
 
     public void StopMusic()
     {
+        if (_musicFadeRoutine != null)
+        {
+            StopCoroutine(_musicFadeRoutine);
+            _musicFadeRoutine = null;
+        }
+
         if (musicSource == null)
         {
             return;
@@ -85,7 +150,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        float finalVolume = Mathf.Clamp01(sfxVolume * volumeMultiplier);
+        float finalVolume = Mathf.Max(0f, sfxVolume * volumeMultiplier);
         sfxSource.PlayOneShot(clip, finalVolume);
     }
 }

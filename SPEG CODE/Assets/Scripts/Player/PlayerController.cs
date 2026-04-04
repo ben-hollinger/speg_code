@@ -46,6 +46,8 @@ public class PlayerController : MonoBehaviour, ICombatant
     private static readonly int ComboTrigger = Animator.StringToHash("Combo");
     private static readonly int IdleHash = Animator.StringToHash("Idle");
     private static readonly int RunHash = Animator.StringToHash("Run");
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
+    private static readonly int AttackTagHash = Animator.StringToHash("attack");
     private static readonly int InwardSlashHash = Animator.StringToHash("Inward Slash");
     private static readonly int OutwardSlashHash = Animator.StringToHash("Outward Slash");
 
@@ -53,6 +55,24 @@ public class PlayerController : MonoBehaviour, ICombatant
     public int CurrentHealth => _stats.CurrentHealth;
     public int MaxHealth => _stats.MaxHealth;
     public bool IsDead => _stats.IsDead;
+
+    public static bool IsAliveForEnemies => Instance != null && !Instance.IsDead;
+
+    public void SetMovementFrozen(bool frozen)
+    {
+        if (_movement == null) return;
+        if (frozen)
+        {
+            _movement.SetExternalLocomotionLock(true);
+            _movement.SetFrozen(true);
+            _movement.SetMoveInput(Vector2.zero);
+        }
+        else
+        {
+            _movement.SetExternalLocomotionLock(false);
+            _movement.SetFrozen(false);
+        }
+    }
 
     private void Awake()
     {
@@ -97,6 +117,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         }
 
         MaybeUnfreezeOnLocomotionTransition();
+        MaybeRecoverFromStuckBusy();
         UpdateAnimator();
         UpdateWeaponPoseTargets();
     }
@@ -104,6 +125,11 @@ public class PlayerController : MonoBehaviour, ICombatant
     private void HandleMoveInput(Keyboard kb)
     {
         if (kb == null) return;
+        if (_movement != null && _movement.IsExternalLocomotionLocked())
+        {
+            _movement.SetMoveInput(Vector2.zero);
+            return;
+        }
 
         float h = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f);
         float v = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f);
@@ -161,6 +187,26 @@ public class PlayerController : MonoBehaviour, ICombatant
         _animator.ResetTrigger(ComboTrigger);
     }
 
+    private void MaybeRecoverFromStuckBusy()
+    {
+        if (!_isBusy) return;
+        if (_animator == null) return;
+
+        AnimatorStateInfo current = _animator.GetCurrentAnimatorStateInfo(0);
+        if (IsAttackState(current)) return;
+
+        if (_animator.IsInTransition(0))
+        {
+            AnimatorStateInfo next = _animator.GetNextAnimatorStateInfo(0);
+            if (IsAttackState(next)) return;
+        }
+
+        _isBusy = false;
+        _movement.SetFrozen(false);
+        _comboQueuedFromHash = 0;
+        _animator.ResetTrigger(ComboTrigger);
+    }
+
     public void OnAttackStateEntered()
     {
         _isBusy = true;
@@ -174,7 +220,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         if (_animator != null)
         {
             var current = _animator.GetCurrentAnimatorStateInfo(0);
-            if (IsSlashState(current.shortNameHash)) return;
+            if (IsAttackState(current)) return;
         }
 
         _isBusy = false;
@@ -230,6 +276,7 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private static bool IsSlashState(int hash) => hash == InwardSlashHash || hash == OutwardSlashHash;
     private static bool IsLocomotionState(int hash) => hash == IdleHash || hash == RunHash;
+    private static bool IsAttackState(AnimatorStateInfo stateInfo) => stateInfo.shortNameHash == AttackHash || IsSlashState(stateInfo.shortNameHash) || stateInfo.tagHash == AttackTagHash;
 
     private void UpdateAnimator()
     {
@@ -243,7 +290,9 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private void HandleDeath()
     {
+        AudioManager.Instance?.PlaySfx(BossSequence.PlayerDeathSfxWhileBossActive, 4.0f);
         _isBusy = false;
+        _movement.SetExternalLocomotionLock(false);
         _movement.SetFrozen(false);
         _movement.SetMoveInput(Vector2.zero);
 
