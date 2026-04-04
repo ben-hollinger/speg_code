@@ -92,6 +92,8 @@ public class PlayerController : MonoBehaviour, ICombatant
             _animator.SetBool(IsDeadParam, _stats.IsDead);
     }
 
+    private void Start() => Checkpoint.Restore(transform);
+
     private void OnDestroy()
     {
         if (Instance == this)
@@ -290,7 +292,7 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private void HandleDeath()
     {
-        AudioManager.Instance?.PlaySfx(BossSequence.PlayerDeathSfxWhileBossActive, 4.0f);
+        AudioManager.Instance?.PlaySfx(BossSequence.PlayerDeathSfxWhileBossActive, 2.0f);
         _isBusy = false;
         _movement.SetExternalLocomotionLock(false);
         _movement.SetFrozen(false);

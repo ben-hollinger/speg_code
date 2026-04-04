@@ -95,15 +95,16 @@
 
         void TryPlayVoiceLine(int index)
         {
-            if (index < 0 || index >= voiceLines.Length) return;
+            if (voiceLines == null || index < 0 || index >= voiceLines.Length) return;
             if (voiceLines[index] == null) return;
-            AudioManager.Instance.PlaySfx(voiceLines[index], voiceLinesVolume);
+            AudioManager.Instance?.PlayDialogue(voiceLines[index], voiceLinesVolume);
         }
-        
+
         void EndDialogue()
         {
             isTalking = false;
             dialogueUI.SetActive(false);
+            AudioManager.Instance?.StopDialogue();
 
             animator?.SetBool("isTalking", false);
 

@@ -85,7 +85,8 @@ public class BossSequence : MonoBehaviour
     private void ShowLine(int i)
     {
         _dialogueText.text = _dialogueLines[Mathf.Clamp(i, 0, _dialogueLines.Length - 1)];
-        AudioManager.Instance?.PlaySfx(_lineSfx[i], _lineSfxVolume);
+        if (_lineSfx != null && i < _lineSfx.Length && _lineSfx[i] != null)
+            AudioManager.Instance?.PlayDialogue(_lineSfx[i], _lineSfxVolume);
 
         switch (i)
         {
@@ -155,6 +156,8 @@ public class BossSequence : MonoBehaviour
     private void SetUi(bool on)
     {
         _dialoguePanel.SetActive(on);
+        if (!on)
+            AudioManager.Instance?.StopDialogue();
     }
 
     private void OnDisable()

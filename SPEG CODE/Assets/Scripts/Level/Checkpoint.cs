@@ -16,7 +16,7 @@ public class Checkpoint : MonoBehaviour
 
     public static void Restore(Transform player)
     {
-        wif (!hasCheckpoint) return;
+        if (!hasCheckpoint) return;
         var cc = player.GetComponent<CharacterController>();
         if (cc != null) cc.enabled = false;
         player.SetPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));

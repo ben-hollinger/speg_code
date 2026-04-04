@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource dialogueSource;
 
     [Header("Global Volumes")]
     [Range(0f, 1f)]
@@ -38,6 +39,12 @@ public class AudioManager : MonoBehaviour
             sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
         sfxSource.volume = sfxVolume;
+
+        if (dialogueSource == null)
+            dialogueSource = gameObject.AddComponent<AudioSource>();
+        dialogueSource.playOnAwake = false;
+        dialogueSource.loop = false;
+        dialogueSource.volume = 6;
 
         if (currentMusicClip != null)
         {
@@ -88,8 +95,29 @@ public class AudioManager : MonoBehaviour
         currentMusicClip = null;
         _musicFadeRoutine = null;
     }
-    
-    public void PlayMusic(AudioClip clip)
+
+    private IEnumerator FadeInMusicRoutine(float duration)
+    {
+        if (duration <= 0f)
+        {
+            musicSource.volume = musicVolume;
+            _musicFadeRoutine = null;
+            yield break;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            musicSource.volume = Mathf.Lerp(0f, musicVolume, elapsed / duration);
+            yield return null;
+        }
+
+        musicSource.volume = musicVolume;
+        _musicFadeRoutine = null;
+    }
+
+    public void PlayMusic(AudioClip clip, float fadeInDuration = 2f)
     {
         if (_musicFadeRoutine != null)
         {
@@ -112,8 +140,16 @@ public class AudioManager : MonoBehaviour
 
         musicSource.clip = clip;
         musicSource.loop = true;
-        musicSource.volume = musicVolume;
         musicSource.Play();
+        musicSource.volume = 0f;
+
+        if (fadeInDuration <= 0f)
+        {
+            musicSource.volume = musicVolume;
+            return;
+        }
+
+        _musicFadeRoutine = StartCoroutine(FadeInMusicRoutine(fadeInDuration));
     }
 
     public void StopMusic()
@@ -152,5 +188,20 @@ public class AudioManager : MonoBehaviour
 
         float finalVolume = Mathf.Max(0f, sfxVolume * volumeMultiplier);
         sfxSource.PlayOneShot(clip, finalVolume);
+    }
+
+    public void PlayDialogue(AudioClip clip, float volumeMultiplier = 1f)
+    {
+        float finalVolume = Mathf.Max(0f, sfxVolume * volumeMultiplier);
+        dialogueSource.Stop();
+        dialogueSource.clip = clip;
+        dialogueSource.volume = 6f;
+        dialogueSource.Play();
+    }
+
+    public void StopDialogue()
+    {
+        if (dialogueSource != null)
+            dialogueSource.Stop();
     }
 }

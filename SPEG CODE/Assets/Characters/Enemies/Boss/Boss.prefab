@@ -579,7 +579,6 @@ MonoBehaviour:
   _enemyController: {fileID: 1045251942280232958}
   _dialoguePanel: {fileID: 0}
   _dialogueText: {fileID: 0}
-  _continueHint: {fileID: 0}
   _dialogueStartRange: 8
   _advanceKey: 19
   _dialogueLines:
@@ -598,7 +597,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _lineSfxVolume: 12
+  _lineSfxVolume: 1
   _playerDeathSfxAfterBossStarted: {fileID: 8300000, guid: 24b12c5da969f64a8ac501be812b8b61, type: 3}
   _forwardMoveInitialDelay: 1.8
   _forwardMoveDistance: 6
