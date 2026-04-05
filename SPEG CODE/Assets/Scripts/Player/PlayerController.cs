@@ -92,6 +92,14 @@ public class PlayerController : MonoBehaviour, ICombatant
             _animator.SetBool(IsDeadParam, _stats.IsDead);
     }
 
+    private void Start()
+    {
+        Checkpoint.Restore(transform);
+        XPBar.Instance?.ApplyProgressionToPlayer();
+    }
+
+    public void SetMeleeDamage(int damage) => _meleeDamage = Mathf.Max(0, damage);
+
     private void OnDestroy()
     {
         if (Instance == this)
@@ -104,7 +112,9 @@ public class PlayerController : MonoBehaviour, ICombatant
     {
         bool isDead = _stats.IsDead;
 
-        if (!_wasDead && isDead)
+        if (!isDead)
+            _wasDead = false;
+        else if (!_wasDead)
         {
             _wasDead = true;
             HandleDeath();
@@ -290,7 +300,7 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private void HandleDeath()
     {
-        AudioManager.Instance?.PlaySfx(BossSequence.PlayerDeathSfxWhileBossActive, 4.0f);
+        AudioManager.Instance?.PlaySfx(BossSequence.PlayerDeathSfxWhileBossActive, 2.0f);
         _isBusy = false;
         _movement.SetExternalLocomotionLock(false);
         _movement.SetFrozen(false);
