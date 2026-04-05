@@ -79,6 +79,10 @@ public class TreasureChest : MonoBehaviour
     {
         _opened = true;
         if (promptUI != null) promptUI.SetActive(false);
+        
+        // Grant a key to the player.
+        if (KeyManager.Instance != null)
+            KeyManager.Instance.AddKey();
 
         if (puzzleUI != null)
         {
