@@ -1,9 +1,9 @@
-﻿namespace NPC
+namespace NPC
 {
     using UnityEngine;
     using TMPro;
 
-    public class NPCDialogueController : MonoBehaviour
+    public class NPCControllerVillage : MonoBehaviour
     {
         [Header("Interaction Settings")]
         public float interactionRange = 3f;
@@ -11,11 +11,14 @@
 
         [Header("Dialogue")]
         public string[] dialogueLines;
+        public AudioClip[] voiceLines;
+        [Range(0f, 1f)]
+        public float voiceLinesVolume = 1f;
 
         [Header("UI")]
-        public GameObject interactPromptUI;   // "Press E to talk" world-space UI
-        public GameObject dialogueUI;         // Your dialogue panel
-        public TextMeshProUGUI dialogueText;  // Text inside dialogue panel
+        public GameObject interactPromptUI;
+        public GameObject dialogueUI;
+        public TextMeshProUGUI dialogueText;
 
         private bool playerInRange = false;
         private bool isTalking = false;
@@ -41,7 +44,6 @@
             }
         }
 
-        // --- Trigger Detection ---
         void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
@@ -61,7 +63,6 @@
             }
         }
 
-        // --- Dialogue Logic ---
         void StartDialogue()
         {
             isTalking = true;
@@ -69,10 +70,10 @@
             dialogueUI.SetActive(true);
             interactPromptUI.SetActive(false);
 
-            // Optional: trigger NPC talk animation
             animator?.SetBool("isTalking", true);
 
             dialogueText.text = dialogueLines[dialogueIndex];
+            TryPlayVoiceLine(dialogueIndex);
         }
 
         void AdvanceDialogue()
@@ -82,6 +83,7 @@
             if (dialogueIndex < dialogueLines.Length)
             {
                 dialogueText.text = dialogueLines[dialogueIndex];
+                TryPlayVoiceLine(dialogueIndex);
             }
             else
             {
@@ -89,34 +91,23 @@
             }
         }
 
-//<<<<<<< Updated upstream
-//=======
-/*//<<<<<<< HEAD:SPEG CODE/Assets/Scripts/NPC/NPCController.cs
         void TryPlayVoiceLine(int index)
         {
             if (voiceLines == null || index < 0 || index >= voiceLines.Length) return;
             if (voiceLines[index] == null) return;
             AudioManager.Instance?.PlayDialogue(voiceLines[index], voiceLinesVolume);
-        }*/
+        }
 
-//=======
-//>>>>>>> origin/BenHollinger2:SPEG CODE/Assets/Scripts/NPC/NPCDialogueController.cs
-//>>>>>>> Stashed changes
         void EndDialogue()
         {
             isTalking = false;
             dialogueUI.SetActive(false);
-//<<<<<<< Updated upstream
-//=======
             AudioManager.Instance?.StopDialogue();
-//>>>>>>> Stashed changes
 
             animator?.SetBool("isTalking", false);
 
-            // Show prompt again if player is still nearby
             if (playerInRange)
                 interactPromptUI.SetActive(true);
         }
     }
-
 }
