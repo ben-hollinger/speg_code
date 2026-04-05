@@ -9,8 +9,8 @@ public class Bullet : MonoBehaviour
     private Vector3 _velocity;
     private float _timeAlive;
     private bool _isPlayerBullet;
+    private bool _hasImpacted;
     private Transform _owner;
-    private bool _hit;
 
     public void Initialize(Vector3 direction, int damage, bool isPlayerBullet)
     {
@@ -23,8 +23,8 @@ public class Bullet : MonoBehaviour
         _damage = damage;
         _timeAlive = 0f;
         _isPlayerBullet = isPlayerBullet;
+        _hasImpacted = false;
         _owner = owner;
-        _hit = false;
     }
 
     private void Update()
@@ -38,11 +38,8 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_hit)
-        {
-            Destroy(gameObject);
+        if (_hasImpacted)
             return;
-        }
 
         // If the bullet was spawned inside the shooter, ignore that collision so
         // the bullet can exit and travel normally.
@@ -57,6 +54,7 @@ public class Bullet : MonoBehaviour
         // Colliding with ground/walls destroys the bullet.
         if (hitLayer == groundLayer)
         {
+            _hasImpacted = true;
             Destroy(gameObject);
             return;
         }
@@ -64,22 +62,20 @@ public class Bullet : MonoBehaviour
         if (_isPlayerBullet)
         {
             // Player bullets damage enemies only.
-            if (hitLayer == playerLayer) { Destroy(gameObject); return; } // self-hit (no owner match)
+            if (hitLayer == playerLayer) { _hasImpacted = true; Destroy(gameObject); return; } // self-hit (no owner match)
             if (hitLayer != enemyLayer) return;
         }
         else
         {
             // Enemy bullets damage player only.
-            if (hitLayer == enemyLayer) { Destroy(gameObject); return; } // enemy hit (not player)
+            if (hitLayer == enemyLayer) { _hasImpacted = true; Destroy(gameObject); return; } // enemy hit (not player)
             if (hitLayer != playerLayer) return;
         }
 
+        _hasImpacted = true;
         var damageable = other.GetComponentInParent<IDamageable>();
         if (damageable != null && !damageable.IsDead)
-        {
             damageable.TakeDamage(_damage);
-            _hit = true;
-        }
 
         Destroy(gameObject);
     }

@@ -39,6 +39,11 @@ public class PlayerHeartsUI : MonoBehaviour
         WireSubscription();
     }
 
+    private void Start()
+    {
+        WireSubscription();
+    }
+
     private void ResolvePlayerStats()
     {
         if (PlayerController.Instance != null)
@@ -78,9 +83,7 @@ public class PlayerHeartsUI : MonoBehaviour
     {
         for (int i = _heartImages.Count - 1; i >= 0; i--)
         {
-            var img = _heartImages[i];
-            if (img != null)
-                DestroyImmediate(img.gameObject);
+            Destroy(_heartImages[i].gameObject);
         }
         _heartImages.Clear();
 

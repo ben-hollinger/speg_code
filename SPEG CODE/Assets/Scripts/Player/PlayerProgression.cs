@@ -12,6 +12,6 @@ public static class PlayerProgression
     public static int MaxHealthForLevel(int level)
     {
         if (level < 1) level = 1;
-        return BaseMaxHealth + (level - 1) / 2;
+        return BaseMaxHealth + (level / 2);
     }
 }

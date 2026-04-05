@@ -59,6 +59,11 @@ public class StatsUI : MonoBehaviour
         WirePlayerStatsSubscription();
     }
 
+    private void Start()
+    {
+        WirePlayerStatsSubscription();
+    }
+
     private void ResolvePlayerStats()
     {
         if (PlayerController.Instance != null)
