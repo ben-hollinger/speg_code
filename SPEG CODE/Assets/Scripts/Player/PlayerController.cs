@@ -92,7 +92,13 @@ public class PlayerController : MonoBehaviour, ICombatant
             _animator.SetBool(IsDeadParam, _stats.IsDead);
     }
 
-    private void Start() => Checkpoint.Restore(transform);
+    private void Start()
+    {
+        Checkpoint.Restore(transform);
+        XPBar.Instance?.ApplyProgressionToPlayer();
+    }
+
+    public void SetMeleeDamage(int damage) => _meleeDamage = Mathf.Max(0, damage);
 
     private void OnDestroy()
     {
@@ -106,7 +112,9 @@ public class PlayerController : MonoBehaviour, ICombatant
     {
         bool isDead = _stats.IsDead;
 
-        if (!_wasDead && isDead)
+        if (!isDead)
+            _wasDead = false;
+        else if (!_wasDead)
         {
             _wasDead = true;
             HandleDeath();
