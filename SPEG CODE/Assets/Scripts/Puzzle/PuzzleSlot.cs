@@ -30,8 +30,9 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
             item.transform.SetParent(transform);
             
             isFilled = true;
+            Debug.Log($"Filled slot: {gameObject.name}");
+            Debug.Log("fill status: "+isFilled.ToString());
             UpdateColor();
-            
             
         }
     }
@@ -61,13 +62,14 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
         return needsFilled;
     }
     
-    public void setIsFilled(bool value)
-    {
-        isFilled = value;
-    }
     
     public bool getIsFilled()
     {
         return isFilled;
+    }
+
+    public bool isSolved()
+    {
+        return isFilled==needsFilled;
     }
 }
