@@ -17,6 +17,10 @@ public class AudioManager : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float sfxVolume = 1f;
 
+    [Tooltip("Dialogue loudness 0–1 (Unity clamps AudioSource.volume to 1).")]
+    [Range(0f, 1f)]
+    [SerializeField] private float _dialogueVolume = 1f;
+
     [SerializeField] private AudioClip currentMusicClip;
 
     private Coroutine _musicFadeRoutine;
@@ -44,7 +48,7 @@ public class AudioManager : MonoBehaviour
             dialogueSource = gameObject.AddComponent<AudioSource>();
         dialogueSource.playOnAwake = false;
         dialogueSource.loop = false;
-        dialogueSource.volume = 6;
+        dialogueSource.volume = _dialogueVolume;
 
         if (currentMusicClip != null)
         {
@@ -192,10 +196,13 @@ public class AudioManager : MonoBehaviour
 
     public void PlayDialogue(AudioClip clip, float volumeMultiplier = 1f)
     {
-        float finalVolume = Mathf.Max(0f, sfxVolume * volumeMultiplier);
+        if (clip == null || dialogueSource == null)
+            return;
+
+        float finalVolume = Mathf.Clamp01(_dialogueVolume * Mathf.Clamp01(volumeMultiplier));
         dialogueSource.Stop();
         dialogueSource.clip = clip;
-        dialogueSource.volume = 6f;
+        dialogueSource.volume = finalVolume;
         dialogueSource.Play();
     }
 
