@@ -53,6 +53,8 @@ public class MagicBlast : MonoBehaviour
         if (_hasHit) return;
 
         int hitLayer = other.gameObject.layer;
+        
+        if (hitLayer == LayerMask.NameToLayer("TutorialBoundary")) return;
 
         // Ignore the player layer as a fallback safety check.
         if (hitLayer == LayerMask.NameToLayer("Player")) return;

@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6a933986-75e0-4b75-bb90-b7c7ba3b5e38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/PlayerAbilities/MagicBlast.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/PlayerAbilities/MagicBlast.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/BasicTerrainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/BasicTerrainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Combat/MagicBlast.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Combat/MagicBlast.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +19,8 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Combat/MagicBlast.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/NPC/NPCController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player/MagicBlastShooter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Rock Minigame/TutorialAreaTrigger.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@37e0d4fc2503/Shaders/Lit.shader" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
