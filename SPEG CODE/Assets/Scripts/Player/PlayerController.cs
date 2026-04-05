@@ -312,4 +312,9 @@ public class PlayerController : MonoBehaviour, ICombatant
     {
         _meleeDamage = damage;
     }
+    
+    public void SetMovementFrozen(bool frozen)
+    {
+        _movement.SetFrozen(frozen);
+    }
 }
