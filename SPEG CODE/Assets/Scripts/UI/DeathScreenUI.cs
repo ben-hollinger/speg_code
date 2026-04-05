@@ -21,28 +21,79 @@ public class DeathScreenUI : MonoBehaviour
 
     private bool _shown;
 
-    private void Awake()
+    private void Start()
     {
-        if (_playerStats == null && PlayerController.Instance != null)
-        {
-            _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
-        }
+        WirePlayerStats();
     }
 
     private void OnEnable()
     {
-        if (_playerStats != null)
-        {
-            _playerStats.PlayerDied += OnPlayerDied;
-        }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        WirePlayerStats();
     }
 
     private void OnDisable()
     {
-        if (_playerStats != null)
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        UnwirePlayerStats();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        WirePlayerStats();
+    }
+
+    private void ResolvePlayerStats()
+    {
+        if (PlayerController.Instance != null)
+            _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
+    }
+
+    private void WirePlayerStats()
+    {
+        UnwirePlayerStats();
+        ResolvePlayerStats();
+        _playerStats = PlayerController.Instance.gameObject.GetComponent<PlayerStats>();
+
+        _playerStats.PlayerDied += OnPlayerDied;
+        _playerStats.PlayerRevived += OnPlayerRevived;
+
+        if (!_playerStats.IsDead)
+            ResetDeathPresentation();
+    }
+
+    private void UnwirePlayerStats()
+    {
+        if (_playerStats == null) return;
+        _playerStats.PlayerDied -= OnPlayerDied;
+        _playerStats.PlayerRevived -= OnPlayerRevived;
+    }
+
+    private void OnPlayerRevived()
+    {
+        ResetDeathPresentation();
+    }
+
+    private void ResetDeathPresentation()
+    {
+        StopAllCoroutines();
+        _shown = false;
+
+        if (_statsPanel != null)
+            _statsPanel.SetActive(true);
+
+        if (_overlayGroup != null)
         {
-            _playerStats.PlayerDied -= OnPlayerDied;
+            _overlayGroup.alpha = 0f;
+            _overlayGroup.blocksRaycasts = false;
+            _overlayGroup.interactable = false;
         }
+
+        if (_restartButton != null)
+            _restartButton.gameObject.SetActive(false);
+
+        if (_messageText != null)
+            _messageText.text = string.Empty;
     }
 
     private void OnPlayerDied()
@@ -53,7 +104,8 @@ public class DeathScreenUI : MonoBehaviour
         if (AudioManager.Instance != null)
             AudioManager.Instance.FadeOutMusic(_fadeDuration);
 
-        _statsPanel.SetActive(false);
+        if (_statsPanel != null)
+            _statsPanel.SetActive(false);
 
         StartCoroutine(ShowDeathSequence());
     }
@@ -83,7 +135,7 @@ public class DeathScreenUI : MonoBehaviour
         _restartButton.gameObject.SetActive(true);
     }
 
-    private void RestartScene()
+    public void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

@@ -4,6 +4,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
 {
     public delegate void PlayerDiedHandler();
     public event PlayerDiedHandler PlayerDied;
+    public event System.Action PlayerRevived;
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private AudioClip[] _damageGruntClips;
 
@@ -47,6 +48,23 @@ public class PlayerStats : MonoBehaviour, IDamageable
     {
         _isDead = false;
         _currentHealth = _maxHealth;
+        NotifyHealthChanged();
+        PlayerRevived?.Invoke();
+    }
+
+    public void ApplyMaxHealthFromProgression(int newMax)
+    {
+        if (newMax < 1) newMax = 1;
+        int oldMax = _maxHealth;
+        _maxHealth = newMax;
+        if (_isDead) return;
+
+        int gained = newMax - oldMax;
+        if (gained > 0)
+            _currentHealth = Mathf.Min(_currentHealth + gained, _maxHealth);
+        else
+            _currentHealth = Mathf.Min(_currentHealth, _maxHealth);
+
         NotifyHealthChanged();
     }
 

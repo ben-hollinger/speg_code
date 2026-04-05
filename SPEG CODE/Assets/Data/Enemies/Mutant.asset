@@ -16,7 +16,7 @@ MonoBehaviour:
   _maxHealth: 100
   _XPReward: 100
   _attackInterval: 0.3
-  _aggroRadius: 9
+  _aggroRadius: 10
   _aggroHeight: 2
   _turnSpeed: 360
   _modelPrefab: {fileID: 0}

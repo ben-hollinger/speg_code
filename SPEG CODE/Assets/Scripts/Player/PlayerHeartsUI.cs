@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerHeartsUI : MonoBehaviour
@@ -13,28 +14,60 @@ public class PlayerHeartsUI : MonoBehaviour
 
     private List<Image> _heartImages = new List<Image>();
     private int _maxHealthShown = -1;
+    private PlayerStats _wiredHealthSource;
 
     private void Awake()
     {
-        if (_playerStats == null && PlayerController.Instance != null)
-        {
-            _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
-        }
-
-        _heartTemplate.gameObject.SetActive(false);
-
-        BuildHearts(_playerStats.MaxHealth);
-        Refresh(_playerStats.CurrentHealth, _playerStats.MaxHealth);
+        if (_heartTemplate != null)
+            _heartTemplate.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
-        _playerStats.HealthChanged += OnHealthChanged;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        WireSubscription();
     }
 
     private void OnDisable()
     {
-        _playerStats.HealthChanged -= OnHealthChanged;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        UnwireSubscription();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        WireSubscription();
+    }
+
+    private void Start()
+    {
+        WireSubscription();
+    }
+
+    private void ResolvePlayerStats()
+    {
+        if (PlayerController.Instance != null)
+            _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
+    }
+
+    private void WireSubscription()
+    {
+        UnwireSubscription();
+        ResolvePlayerStats();
+        if (_playerStats == null || _heartTemplate == null || _heartsContainer == null) return;
+
+        _playerStats.HealthChanged += OnHealthChanged;
+        _wiredHealthSource = _playerStats;
+        BuildHearts(_playerStats.MaxHealth);
+        Refresh(_playerStats.CurrentHealth, _playerStats.MaxHealth);
+    }
+
+    private void UnwireSubscription()
+    {
+        var s = _wiredHealthSource;
+        _wiredHealthSource = null;
+        if (s != null)
+            s.HealthChanged -= OnHealthChanged;
     }
 
     private void OnHealthChanged(int currentHealth, int maxHealth)

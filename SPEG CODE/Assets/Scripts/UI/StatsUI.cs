@@ -1,5 +1,6 @@
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour
@@ -28,14 +29,12 @@ public class StatsUI : MonoBehaviour
     private float _lastSlider;
     private int _lastXpFloor = int.MinValue;
     private int _lastXpToNextFloor = int.MinValue;
+    private PlayerStats _wiredHealthSource;
 
     private void Awake()
     {
         if (_xpBar == null)
             _xpBar = XPBar.Instance;
-
-        if (_playerStats == null && PlayerController.Instance != null)
-            _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
 
         if (_xpLineText != null)
             _xpLineText.supportRichText = true;
@@ -45,20 +44,50 @@ public class StatsUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_playerStats != null)
-            _playerStats.HealthChanged += OnHealthChanged;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        WirePlayerStatsSubscription();
     }
 
     private void OnDisable()
     {
-        if (_playerStats != null)
-            _playerStats.HealthChanged -= OnHealthChanged;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        UnwirePlayerStatsSubscription();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        WirePlayerStatsSubscription();
     }
 
     private void Start()
     {
-        RefreshXpLine(force: true);
+        WirePlayerStatsSubscription();
+    }
+
+    private void ResolvePlayerStats()
+    {
+        if (PlayerController.Instance != null)
+            _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
+    }
+
+    private void WirePlayerStatsSubscription()
+    {
+        UnwirePlayerStatsSubscription();
+        ResolvePlayerStats();
+        if (_playerStats == null) return;
+
+        _playerStats.HealthChanged += OnHealthChanged;
+        _wiredHealthSource = _playerStats;
         RefreshThreadLine();
+        RefreshXpLine(force: true);
+    }
+
+    private void UnwirePlayerStatsSubscription()
+    {
+        var s = _wiredHealthSource;
+        _wiredHealthSource = null;
+        if (s != null)
+            s.HealthChanged -= OnHealthChanged;
     }
 
     private void Update()
