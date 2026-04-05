@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
     private float _timeAlive;
     private bool _isPlayerBullet;
     private Transform _owner;
+    private bool _hit;
 
     public void Initialize(Vector3 direction, int damage, bool isPlayerBullet)
     {
@@ -23,6 +24,7 @@ public class Bullet : MonoBehaviour
         _timeAlive = 0f;
         _isPlayerBullet = isPlayerBullet;
         _owner = owner;
+        _hit = false;
     }
 
     private void Update()
@@ -36,6 +38,12 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_hit)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         // If the bullet was spawned inside the shooter, ignore that collision so
         // the bullet can exit and travel normally.
         if (_owner != null && other.transform.IsChildOf(_owner))
@@ -68,7 +76,10 @@ public class Bullet : MonoBehaviour
 
         var damageable = other.GetComponentInParent<IDamageable>();
         if (damageable != null && !damageable.IsDead)
+        {
             damageable.TakeDamage(_damage);
+            _hit = true;
+        }
 
         Destroy(gameObject);
     }
