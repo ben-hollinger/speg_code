@@ -13,7 +13,7 @@ public class HatSelector : MonoBehaviour
     //   4 = Magic Blast + Double Jump + Dashing Strike + Shield
     //   5 = All abilities (+ Grapple)
     // ═════════════════════════════════════════════════════════════════════════
-    private const int CURRENT_LEVEL = 4; //change this to level number 
+    [SerializeField] private int CURRENT_LEVEL = 4; // edited so now you can change level based on scene
 
     [Header("Hat Panel UI")]
     public GameObject hatPanel;

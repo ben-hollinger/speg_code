@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6a933986-75e0-4b75-bb90-b7c7ba3b5e38" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/BasicTerrainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/BasicTerrainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Combat/MagicBlast.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Combat/MagicBlast.cs" afterDir="false" />
-    </list>
+    <list default="true" id="6a933986-75e0-4b75-bb90-b7c7ba3b5e38" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
