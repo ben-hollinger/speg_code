@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6393308528859329683}
   m_Layer: 0
   m_Name: MagicBlast
-  m_TagString: Untagged
+  m_TagString: MagicBlast
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

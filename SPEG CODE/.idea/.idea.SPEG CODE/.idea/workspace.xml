@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a933986-75e0-4b75-bb90-b7c7ba3b5e38" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/XP Panel.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/PlayerAbilities/MagicBlast.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/PlayerAbilities/MagicBlast.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/BasicTerrainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/BasicTerrainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Level5.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Level5.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Recovery/0.unity.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/XP Panel.prefab.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
