@@ -202,6 +202,9 @@ public class EnemyController : MonoBehaviour, ICombatant
             _animator.SetTrigger("Death");
         }
 
+        gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
         AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
 
         UpdateHealthBar();
