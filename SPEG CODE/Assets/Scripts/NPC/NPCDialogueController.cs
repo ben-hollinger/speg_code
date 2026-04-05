@@ -89,10 +89,27 @@
             }
         }
 
+//<<<<<<< Updated upstream
+//=======
+/*//<<<<<<< HEAD:SPEG CODE/Assets/Scripts/NPC/NPCController.cs
+        void TryPlayVoiceLine(int index)
+        {
+            if (voiceLines == null || index < 0 || index >= voiceLines.Length) return;
+            if (voiceLines[index] == null) return;
+            AudioManager.Instance?.PlayDialogue(voiceLines[index], voiceLinesVolume);
+        }*/
+
+//=======
+//>>>>>>> origin/BenHollinger2:SPEG CODE/Assets/Scripts/NPC/NPCDialogueController.cs
+//>>>>>>> Stashed changes
         void EndDialogue()
         {
             isTalking = false;
             dialogueUI.SetActive(false);
+//<<<<<<< Updated upstream
+//=======
+            AudioManager.Instance?.StopDialogue();
+//>>>>>>> Stashed changes
 
             animator?.SetBool("isTalking", false);
 
