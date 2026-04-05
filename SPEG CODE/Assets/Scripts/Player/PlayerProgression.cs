@@ -1,7 +1,7 @@
 public static class PlayerProgression
 {
     public const int BaseMeleeDamage = 10;
-    public const int BaseMaxHealth = 6;
+    public const int BaseMaxHealth = 10;
 
     public static int MeleeDamageForLevel(int level)
     {

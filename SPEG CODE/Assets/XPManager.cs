@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Singleton — tracks collected puzzle pieces and total XP.
-/// Attach to a persistent GameObject (e.g. GameManager).
-/// </summary>
 public class XPManager : MonoBehaviour
 {
     public static XPManager Instance { get; private set; }
