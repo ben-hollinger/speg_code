@@ -3,15 +3,37 @@ using UnityEngine;
 public class chestlogic : MonoBehaviour
 {
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GameObject canvasObject;
+    public KeyCode interactKey = KeyCode.E;
+    private bool playerInRange = false;
+
     void Start()
     {
-        
+        canvasObject.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (playerInRange && Input.GetKeyDown(interactKey))
+        {
+            canvasObject.SetActive(true);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+        }
     }
 }
+
