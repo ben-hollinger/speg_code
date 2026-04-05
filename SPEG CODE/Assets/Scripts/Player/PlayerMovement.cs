@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _moveInput;
     private float _verticalVelocity;
     private bool _isFrozen;
+    private bool _externalLocomotionLock;
     private Vector3 _grappleMotion;
 
     public Vector3 MoveInput => _moveInput;
@@ -24,8 +25,17 @@ public class PlayerMovement : MonoBehaviour
         _jumpForce = jumpForce;
     }
 
+    public void SetExternalLocomotionLock(bool locked)
+    {
+        _externalLocomotionLock = locked;
+    }
+
+    public bool IsExternalLocomotionLocked() => _externalLocomotionLock;
+
     public void SetFrozen(bool frozen)
     {
+        if (_externalLocomotionLock && !frozen)
+            return;
         _isFrozen = frozen;
     }
 

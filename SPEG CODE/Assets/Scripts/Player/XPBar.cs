@@ -27,6 +27,7 @@ public class XPBar : MonoBehaviour
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -58,28 +59,44 @@ public class XPBar : MonoBehaviour
         xpToNextLevel = Mathf.Round(xpToNextLevel * xpScalingFactor);
         Debug.Log("[XPBar] LEVEL UP! Now Level " + currentLevel + ". Next level needs " + xpToNextLevel + " XP.");
         UpdateLevelText();
+        ApplyProgressionToPlayer();
+    }
+
+    public void ApplyProgressionToPlayer()
+    {
+        if (PlayerController.Instance == null) return;
+        var stats = PlayerController.Instance.GetComponent<PlayerStats>();
+        if (stats == null) return;
+
+        int level = currentLevel;
+        PlayerController.Instance.SetMeleeDamage(PlayerProgression.MeleeDamageForLevel(level));
+        stats.ApplyMaxHealthFromProgression(PlayerProgression.MaxHealthForLevel(level));
     }
 
     private IEnumerator AnimateBar()
     {
         float targetFill = currentXP / xpToNextLevel;
 
-        while (!Mathf.Approximately(xpSlider.value, targetFill))
+        if (xpSlider != null)
         {
-            xpSlider.value = Mathf.MoveTowards(xpSlider.value, targetFill, fillAnimationSpeed * Time.deltaTime);
-            UpdateFillColour(xpSlider.value);
-            UpdateXPText();
-            yield return null;
+            while (!Mathf.Approximately(xpSlider.value, targetFill))
+            {
+                xpSlider.value = Mathf.MoveTowards(xpSlider.value, targetFill, fillAnimationSpeed * Time.deltaTime);
+                UpdateFillColour(xpSlider.value);
+                UpdateXPText();
+                yield return null;
+            }
+
+            xpSlider.value = targetFill;
+            UpdateFillColour(targetFill);
         }
-        
-        xpSlider.value = targetFill;
-        UpdateFillColour(targetFill);
+
         UpdateXPText();
     }
     
     private void RefreshUI(bool instant = false)
     {
-        if (instant)
+        if (instant && xpSlider != null)
         {
             float fill = currentXP / xpToNextLevel;
             xpSlider.value = fill;
@@ -121,6 +138,7 @@ public class XPBar : MonoBehaviour
         xpToNextLevel = 100f;
         StopAllCoroutines();
         RefreshUI(instant: true);
+        ApplyProgressionToPlayer();
         Debug.Log("[XPBar] Reset to Level 1.");
     }
 }

@@ -8,6 +8,9 @@ public class BulletEmitter : MonoBehaviour
 
     private void FireStraight(BulletPatternData pattern)
     {
+        if (!PlayerController.IsAliveForEnemies)
+            return;
+
         PlayAttackSfx();
         Vector3 forward = transform.forward;
         int count = Mathf.Max(1, pattern.BulletCount);
@@ -26,6 +29,9 @@ public class BulletEmitter : MonoBehaviour
 
     private void FireSpread(BulletPatternData pattern)
     {
+        if (!PlayerController.IsAliveForEnemies)
+            return;
+
         PlayAttackSfx();
         Vector3 forward = transform.forward;
         int count = Mathf.Max(1, pattern.BulletCount);
@@ -51,6 +57,9 @@ public class BulletEmitter : MonoBehaviour
 
     private void FireCircle(BulletPatternData pattern)
     {
+        if (!PlayerController.IsAliveForEnemies)
+            return;
+
         PlayAttackSfx();
         int count = Mathf.Max(1, pattern.BulletCount);
         Vector3 forward = transform.forward;
