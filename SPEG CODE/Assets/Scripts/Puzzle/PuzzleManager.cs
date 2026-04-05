@@ -8,6 +8,7 @@ public class PuzzleManager : MonoBehaviour
 {
     private PuzzleSlot[] slots;
     private bool isSolved = false;
+    public int[] fillRequirements; 
 
     void Awake()
     {
@@ -17,11 +18,12 @@ public class PuzzleManager : MonoBehaviour
     void Start()
     {
         setColor();
-        slots = FindObjectsByType<PuzzleSlot>(FindObjectsSortMode.InstanceID); 
-        slots[0].setNeedsFilled(true);
-        slots[0].GetComponent<Image>().color = Color.red;
-        slots[24].setNeedsFilled(true);
-        slots[24].GetComponent<Image>().color = Color.red;
+        slots = FindObjectsByType<PuzzleSlot>(FindObjectsSortMode.InstanceID);
+        foreach (var requirement in fillRequirements)
+        {
+            slots[requirement].setNeedsFilled(true);
+            slots[requirement].GetComponent<Image>().color = Color.red;
+        }
         
     }
     
@@ -62,7 +64,7 @@ public class PuzzleManager : MonoBehaviour
         foreach (var ui in uiElements)
         {
             ui.alpha = 0;
-            ui.interactable = false;
+            ui.interactable = false; 
             ui.blocksRaycasts = false;
         }
     }
