@@ -13,7 +13,7 @@ public class HatSelector : MonoBehaviour
     //   4 = Magic Blast + Double Jump + Dashing Strike + Shield
     //   5 = All abilities (+ Grapple)
     // ═════════════════════════════════════════════════════════════════════════
-    private const int CURRENT_LEVEL = 4; //change this to level number 
+    [SerializeField] private int CURRENT_LEVEL = 4; // edited so now you can change level based on scene
 
     [Header("Hat Panel UI")]
     public GameObject hatPanel;
@@ -36,7 +36,7 @@ public class HatSelector : MonoBehaviour
     public ShieldAbility shieldAbility;
     public GrappleController grappleController;
     // Uncomment as other abilities are implemented:
-    // public MagicBlast magicBlastAbility;
+    public MagicBlastShooter magicBlastShooter;
     // public DoubleJump doubleJumpAbility;
     // public DashingStrike dashingStrikeAbility;
 
@@ -126,7 +126,7 @@ public class HatSelector : MonoBehaviour
     {
         if (shieldAbility != null)     shieldAbility.enabled     = false;
         if (grappleController != null) grappleController.enabled = false;
-        // if (magicBlastAbility    != null) magicBlastAbility.enabled    = false;
+        if (magicBlastShooter != null)  magicBlastShooter.enabled  = false;
         // if (doubleJumpAbility    != null) doubleJumpAbility.enabled    = false;
         // if (dashingStrikeAbility != null) dashingStrikeAbility.enabled = false;
     }
@@ -138,7 +138,10 @@ public class HatSelector : MonoBehaviour
         switch (type)
         {
             case AbilityType.MagicBlast:
-                Debug.Log("[HatSelector] Magic Blast selected (not yet implemented)");
+                if (magicBlastShooter != null)
+                    magicBlastShooter.enabled = true;
+                else
+                    Debug.LogWarning("[HatSelector] MagicBlastShooter not assigned!");
                 break;
 
             case AbilityType.DoubleJump:
