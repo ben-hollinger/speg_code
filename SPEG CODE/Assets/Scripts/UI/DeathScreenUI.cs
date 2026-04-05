@@ -1,17 +1,28 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class DeathScreenUI : MonoBehaviour
 {
+    [FormerlySerializedAs("playerStats")]
     [SerializeField] private PlayerStats _playerStats;
+    [FormerlySerializedAs("statsPanel")]
     [SerializeField] private GameObject _statsPanel;
+    [FormerlySerializedAs("overlayGroup")]
     [SerializeField] private CanvasGroup _overlayGroup;
-    [SerializeField] private Text _messageText;
+    [FormerlySerializedAs("_messageText")]
+    [FormerlySerializedAs("messageText")]
+    [SerializeField] private Graphic _messageGraphic;
+    [FormerlySerializedAs("restartButton")]
     [SerializeField] private Button _restartButton;
+    [FormerlySerializedAs("fadeDuration")]
     [SerializeField] private float _fadeDuration = 0.6f;
+    [FormerlySerializedAs("typewriterDelay")]
     [SerializeField] private float _typewriterDelay = 0.03f;
+    [FormerlySerializedAs("deathMessages")]
     [SerializeField] private string[] _deathMessages =
     {
         "ERROR: PROCESS TERMINATED",
@@ -20,6 +31,15 @@ public class DeathScreenUI : MonoBehaviour
     };
 
     private bool _shown;
+    private PlayerStats _wiredPlayerStats;
+
+    private void Awake()
+    {
+        if (_restartButton != null)
+            _restartButton.onClick.AddListener(RestartScene);
+
+        ResetDeathPresentation();
+    }
 
     private void Start()
     {
@@ -45,6 +65,9 @@ public class DeathScreenUI : MonoBehaviour
 
     private void ResolvePlayerStats()
     {
+        if (_playerStats != null)
+            return;
+
         if (PlayerController.Instance != null)
             _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
     }
@@ -53,10 +76,12 @@ public class DeathScreenUI : MonoBehaviour
     {
         UnwirePlayerStats();
         ResolvePlayerStats();
-        _playerStats = PlayerController.Instance.gameObject.GetComponent<PlayerStats>();
+        if (_playerStats == null)
+            return;
 
         _playerStats.PlayerDied += OnPlayerDied;
         _playerStats.PlayerRevived += OnPlayerRevived;
+        _wiredPlayerStats = _playerStats;
 
         if (!_playerStats.IsDead)
             ResetDeathPresentation();
@@ -64,9 +89,12 @@ public class DeathScreenUI : MonoBehaviour
 
     private void UnwirePlayerStats()
     {
-        if (_playerStats == null) return;
-        _playerStats.PlayerDied -= OnPlayerDied;
-        _playerStats.PlayerRevived -= OnPlayerRevived;
+        var playerStats = _wiredPlayerStats;
+        _wiredPlayerStats = null;
+        if (playerStats == null) return;
+
+        playerStats.PlayerDied -= OnPlayerDied;
+        playerStats.PlayerRevived -= OnPlayerRevived;
     }
 
     private void OnPlayerRevived()
@@ -92,8 +120,7 @@ public class DeathScreenUI : MonoBehaviour
         if (_restartButton != null)
             _restartButton.gameObject.SetActive(false);
 
-        if (_messageText != null)
-            _messageText.text = string.Empty;
+        SetGraphicText(_messageGraphic, string.Empty);
     }
 
     private void OnPlayerDied()
@@ -116,27 +143,61 @@ public class DeathScreenUI : MonoBehaviour
         while (elapsed < _fadeDuration)
         {
             elapsed += Time.deltaTime;
-            _overlayGroup.alpha = Mathf.Clamp01(elapsed / _fadeDuration);
+            if (_overlayGroup != null)
+                _overlayGroup.alpha = Mathf.Clamp01(elapsed / _fadeDuration);
             yield return null;
         }
 
-        _overlayGroup.alpha = 1f;
-        _overlayGroup.blocksRaycasts = true;
-        _overlayGroup.interactable = true;
+        if (_overlayGroup != null)
+        {
+            _overlayGroup.alpha = 1f;
+            _overlayGroup.blocksRaycasts = true;
+            _overlayGroup.interactable = true;
+        }
 
-        string message = _deathMessages[Random.Range(0, _deathMessages.Length)];
-        _messageText.text = string.Empty;
+        string message = _deathMessages != null && _deathMessages.Length > 0
+            ? _deathMessages[Random.Range(0, _deathMessages.Length)]
+            : "ERROR: PROCESS TERMINATED";
+        SetGraphicText(_messageGraphic, string.Empty);
         for (int i = 0; i < message.Length; i++)
         {
-            _messageText.text += message[i];
+            AppendGraphicText(_messageGraphic, message[i]);
             yield return new WaitForSeconds(_typewriterDelay);
         }
 
-        _restartButton.gameObject.SetActive(true);
+        if (_restartButton != null)
+            _restartButton.gameObject.SetActive(true);
     }
 
     public void RestartScene()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private static void SetGraphicText(Graphic textGraphic, string value)
+    {
+        switch (textGraphic)
+        {
+            case Text legacyText:
+                legacyText.text = value;
+                break;
+            case TMP_Text tmpText:
+                tmpText.text = value;
+                break;
+        }
+    }
+
+    private static void AppendGraphicText(Graphic textGraphic, char value)
+    {
+        switch (textGraphic)
+        {
+            case Text legacyText:
+                legacyText.text += value;
+                break;
+            case TMP_Text tmpText:
+                tmpText.text += value;
+                break;
+        }
     }
 }

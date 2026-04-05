@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Serialization;
+using TMPro;
 
 public class XPBar : MonoBehaviour
 {
@@ -9,6 +11,11 @@ public class XPBar : MonoBehaviour
     public Slider xpSlider;
     public Text levelText;
     public Text xpText;
+    [Tooltip("Optional. Use when XP text is TextMeshPro instead of legacy UI Text.")]
+    public TextMeshProUGUI xpTextMeshPro;
+    [Tooltip("Optional. Use when level text is TextMeshPro instead of legacy UI Text.")]
+    public TextMeshProUGUI levelTextMeshPro;
+    [Tooltip("Fill image (Image Type: Filled). Used when xpSlider is not assigned.")]
     public Image fillImage;
 
     [Header("XP Settings")] public int currentLevel = 1;
@@ -18,6 +25,10 @@ public class XPBar : MonoBehaviour
 
     public float xpScalingFactor = 1.25f;
     public float fillAnimationSpeed = 2f;
+
+    [Header("Puzzle Piece Bridge")]
+    [FormerlySerializedAs("usePuzzlePieceXP")]
+    public bool usePuzzlePieceXP = false;
 
     void Awake()
     {
@@ -30,13 +41,26 @@ public class XPBar : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    void OnEnable()
+    {
+        if (usePuzzlePieceXP)
+            XPManager.OnXPChanged += OnPuzzleXPChanged;
+    }
+
+    void OnDisable()
+    {
+        XPManager.OnXPChanged -= OnPuzzleXPChanged;
+    }
+
     void Start()
     {
+        SyncPuzzlePieceXP();
         RefreshUI(instant: true);
     }
 
     public void AddXP(float amount)
     {
+        if (usePuzzlePieceXP) return;
         if (amount <= 0) return;
 
         currentXP += amount;
@@ -73,9 +97,28 @@ public class XPBar : MonoBehaviour
         stats.ApplyMaxHealthFromProgression(PlayerProgression.MaxHealthForLevel(level));
     }
 
+    private void OnPuzzleXPChanged(int xp, float fraction)
+    {
+        if (!usePuzzlePieceXP || XPManager.Instance == null) return;
+
+        currentXP = xp;
+        xpToNextLevel = XPManager.Instance.xpToFillBar;
+
+        StopAllCoroutines();
+        StartCoroutine(AnimateBar());
+    }
+
+    private void SyncPuzzlePieceXP()
+    {
+        if (!usePuzzlePieceXP || XPManager.Instance == null) return;
+
+        currentXP = XPManager.Instance.CurrentXP;
+        xpToNextLevel = XPManager.Instance.xpToFillBar;
+    }
+
     private IEnumerator AnimateBar()
     {
-        float targetFill = currentXP / xpToNextLevel;
+        float targetFill = xpToNextLevel > 0f ? currentXP / xpToNextLevel : 0f;
 
         if (xpSlider != null)
         {
@@ -90,17 +133,38 @@ public class XPBar : MonoBehaviour
             xpSlider.value = targetFill;
             UpdateFillColour(targetFill);
         }
+        else if (fillImage != null)
+        {
+            while (!Mathf.Approximately(fillImage.fillAmount, targetFill))
+            {
+                fillImage.fillAmount = Mathf.MoveTowards(fillImage.fillAmount, targetFill, fillAnimationSpeed * Time.deltaTime);
+                UpdateFillColour(fillImage.fillAmount);
+                UpdateXPText();
+                yield return null;
+            }
+
+            fillImage.fillAmount = targetFill;
+            UpdateFillColour(targetFill);
+        }
 
         UpdateXPText();
     }
     
     private void RefreshUI(bool instant = false)
     {
-        if (instant && xpSlider != null)
+        if (instant)
         {
-            float fill = currentXP / xpToNextLevel;
-            xpSlider.value = fill;
-            UpdateFillColour(fill);
+            float fill = xpToNextLevel > 0f ? currentXP / xpToNextLevel : 0f;
+            if (xpSlider != null)
+            {
+                xpSlider.value = fill;
+                UpdateFillColour(fill);
+            }
+            else if (fillImage != null)
+            {
+                fillImage.fillAmount = fill;
+                UpdateFillColour(fill);
+            }
         }
 
         UpdateLevelText();
@@ -108,14 +172,20 @@ public class XPBar : MonoBehaviour
     }
     private void UpdateLevelText()
     {
+        string s = "Level " + currentLevel;
         if (levelText != null)
-            levelText.text = "Level " + currentLevel;
+            levelText.text = s;
+        if (levelTextMeshPro != null)
+            levelTextMeshPro.text = s;
     }
  
     private void UpdateXPText()
     {
+        string s = Mathf.FloorToInt(currentXP) + " / " + Mathf.FloorToInt(xpToNextLevel) + " XP";
         if (xpText != null)
-            xpText.text = Mathf.FloorToInt(currentXP) + " / " + Mathf.FloorToInt(xpToNextLevel) + " XP";
+            xpText.text = s;
+        if (xpTextMeshPro != null)
+            xpTextMeshPro.text = s;
     }
  
     private void UpdateFillColour(float t)

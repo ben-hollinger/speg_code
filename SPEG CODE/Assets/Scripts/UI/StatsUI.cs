@@ -1,6 +1,8 @@
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour
@@ -10,18 +12,27 @@ public class StatsUI : MonoBehaviour
     private const string HeartGlyph = "\u2764";
 
     [Header("References")]
-    [SerializeField] private Text _xpLineText;
-    [SerializeField] private Text _threadLineText;
+    [FormerlySerializedAs("_xpLineText")]
+    [FormerlySerializedAs("xpLineText")]
+    [SerializeField] private Graphic _xpLineGraphic;
+    [FormerlySerializedAs("_threadLineText")]
+    [FormerlySerializedAs("threadLineText")]
+    [SerializeField] private Graphic _threadLineGraphic;
     [SerializeField] private XPBar _xpBar;
+    [FormerlySerializedAs("playerStats")]
     [SerializeField] private PlayerStats _playerStats;
 
     [Header("XP bar")]
+    [FormerlySerializedAs("barSegmentCount")]
     [SerializeField] private int _barSegmentCount = 40;
+    [FormerlySerializedAs("xpFilledColor")]
     [SerializeField] private string _xpFilledColor = "#4FA8FF";
+    [FormerlySerializedAs("xpEmptyColor")]
     [SerializeField] private string _xpEmptyColor = "#1A1F2E";
 
     [Header("Life (hearts)")]
     [SerializeField] private int _healthPerHeart = 1;
+    [FormerlySerializedAs("heartColor")]
     [SerializeField] private string _fullHeartColor = "#e858d8";
 
     private readonly StringBuilder _sb = new StringBuilder(256);
@@ -36,10 +47,8 @@ public class StatsUI : MonoBehaviour
         if (_xpBar == null)
             _xpBar = XPBar.Instance;
 
-        if (_xpLineText != null)
-            _xpLineText.supportRichText = true;
-        if (_threadLineText != null)
-            _threadLineText.supportRichText = true;
+        EnableRichText(_xpLineGraphic);
+        EnableRichText(_threadLineGraphic);
     }
 
     private void OnEnable()
@@ -66,6 +75,9 @@ public class StatsUI : MonoBehaviour
 
     private void ResolvePlayerStats()
     {
+        if (_playerStats != null)
+            return;
+
         if (PlayerController.Instance != null)
             _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
     }
@@ -92,6 +104,9 @@ public class StatsUI : MonoBehaviour
 
     private void Update()
     {
+        if (_xpBar == null)
+            _xpBar = XPBar.Instance;
+
         RefreshXpLine(force: false);
     }
 
@@ -102,7 +117,7 @@ public class StatsUI : MonoBehaviour
 
     private void RefreshXpLine(bool force)
     {
-        if (_xpLineText == null || _xpBar == null)
+        if (_xpLineGraphic == null || _xpBar == null)
             return;
 
         float fill;
@@ -163,12 +178,12 @@ public class StatsUI : MonoBehaviour
         _sb.Append('/');
         _sb.Append(toNextFloor);
         _sb.Append(" XP");
-        _xpLineText.text = _sb.ToString();
+        SetGraphicText(_xpLineGraphic, _sb.ToString());
     }
 
     private void RefreshThreadLine()
     {
-        if (_threadLineText == null || _playerStats == null)
+        if (_threadLineGraphic == null || _playerStats == null)
             return;
 
         int hph = _healthPerHeart > 0 ? _healthPerHeart : 1;
@@ -186,6 +201,32 @@ public class StatsUI : MonoBehaviour
             _sb.Append("</color> ");
         }
 
-        _threadLineText.text = _sb.ToString();
+        SetGraphicText(_threadLineGraphic, _sb.ToString());
+    }
+
+    private static void EnableRichText(Graphic textGraphic)
+    {
+        switch (textGraphic)
+        {
+            case Text legacyText:
+                legacyText.supportRichText = true;
+                break;
+            case TMP_Text tmpText:
+                tmpText.richText = true;
+                break;
+        }
+    }
+
+    private static void SetGraphicText(Graphic textGraphic, string value)
+    {
+        switch (textGraphic)
+        {
+            case Text legacyText:
+                legacyText.text = value;
+                break;
+            case TMP_Text tmpText:
+                tmpText.text = value;
+                break;
+        }
     }
 }
