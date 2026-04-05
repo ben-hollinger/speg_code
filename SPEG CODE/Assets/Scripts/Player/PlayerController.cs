@@ -5,25 +5,24 @@ public class PlayerController : MonoBehaviour, ICombatant
 {
     public static PlayerController Instance { get; private set; }
 
-    [Header("Identity")]
-    [SerializeField] private string _displayName = "Player";
+    [Header("Identity")] [SerializeField] private string _displayName = "Player";
 
-    [Header("Melee")]
-    [SerializeField] private Transform _meleeHitPoint;
+    [Header("Melee")] [SerializeField] private Transform _meleeHitPoint;
     [SerializeField] private float _meleeRadius = 1.2f;
     [SerializeField] private int _meleeDamage = 10;
     [SerializeField] private LayerMask _enemyLayer;
 
-    [Header("Combo")]
-    [SerializeField, Range(0f, 1f)] private float _comboWindowStart = 0.45f;
+    [Header("Combo")] [SerializeField, Range(0f, 1f)]
+    private float _comboWindowStart = 0.45f;
+
     [SerializeField, Range(0f, 1f)] private float _comboWindowEnd = 0.90f;
 
-    [Header("Weapon Pose Targets")]
-    [SerializeField] private GameObject _armedWeaponPos;
+    [Header("Weapon Pose Targets")] [SerializeField]
+    private GameObject _armedWeaponPos;
+
     [SerializeField] private GameObject _unarmedWeaponPos;
 
-    [Header("SFX")]
-    [SerializeField] private AudioClip _attackSoundClip;
+    [Header("SFX")] [SerializeField] private AudioClip _attackSoundClip;
     [SerializeField] private AudioClip _attackHitSoundClip;
     [SerializeField] private AudioClip[] _footstepSoundClips;
 
@@ -31,6 +30,7 @@ public class PlayerController : MonoBehaviour, ICombatant
     private PlayerStats _stats;
     private Animator _animator;
     private GrappleController _grappleController;
+    private DoubleJump _doubleJump;
 
     private bool _isBusy;
     private bool _wasDead;
@@ -46,6 +46,8 @@ public class PlayerController : MonoBehaviour, ICombatant
     private static readonly int ComboTrigger = Animator.StringToHash("Combo");
     private static readonly int IdleHash = Animator.StringToHash("Idle");
     private static readonly int RunHash = Animator.StringToHash("Run");
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
+    private static readonly int AttackTagHash = Animator.StringToHash("attack");
     private static readonly int InwardSlashHash = Animator.StringToHash("Inward Slash");
     private static readonly int OutwardSlashHash = Animator.StringToHash("Outward Slash");
 
@@ -54,18 +56,22 @@ public class PlayerController : MonoBehaviour, ICombatant
     public int MaxHealth => _stats.MaxHealth;
     public bool IsDead => _stats.IsDead;
 
+    public static bool IsAliveForEnemies => Instance != null && !Instance.IsDead;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
             Debug.LogWarning("Multiple PlayerController instances found. Replacing previous instance.");
         }
+
         Instance = this;
 
         _movement = GetComponent<PlayerMovement>();
         _stats = GetComponent<PlayerStats>();
         _animator = GetComponentInChildren<Animator>();
         _grappleController = GetComponent<GrappleController>();
+        _doubleJump = GetComponent<DoubleJump>();
         _wasDead = _stats.IsDead;
 
         if (_animator != null)
@@ -75,9 +81,7 @@ public class PlayerController : MonoBehaviour, ICombatant
     private void OnDestroy()
     {
         if (Instance == this)
-        {
             Instance = null;
-        }
     }
 
     private void Update()
@@ -97,6 +101,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         }
 
         MaybeUnfreezeOnLocomotionTransition();
+        MaybeRecoverFromStuckBusy();
         UpdateAnimator();
         UpdateWeaponPoseTargets();
     }
@@ -109,8 +114,18 @@ public class PlayerController : MonoBehaviour, ICombatant
         float v = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f);
         _movement.SetMoveInput(new Vector2(h, v).normalized);
 
-        if (kb.spaceKey.wasPressedThisFrame && _movement.TryJump() && _animator != null)
-            _animator.SetTrigger(JumpTrigger);
+        if (kb.spaceKey.wasPressedThisFrame)
+        {
+            if (_movement.TryJump())
+            {
+                if (_animator != null) _animator.SetTrigger(JumpTrigger);
+            }
+            else if (_doubleJump != null && _doubleJump.TryDoubleJump())
+            {
+                _movement.ForceJump();
+                if (_animator != null) _animator.SetTrigger(JumpTrigger);
+            }
+        }
     }
 
     private void HandleCombatInput(Mouse mouse)
@@ -119,7 +134,6 @@ public class PlayerController : MonoBehaviour, ICombatant
         if (!_movement.IsGrounded) return;
         if (_grappleController != null && _grappleController.IsGrappling) return;
 
-        // Start attack chain
         if (!_isBusy && mouse.leftButton.wasPressedThisFrame)
         {
             _isBusy = true;
@@ -129,7 +143,6 @@ public class PlayerController : MonoBehaviour, ICombatant
             return;
         }
 
-        // Continue attack chain
         if (!_isBusy || _animator == null) return;
         if (!mouse.leftButton.isPressed) return;
 
@@ -157,7 +170,26 @@ public class PlayerController : MonoBehaviour, ICombatant
         _isBusy = false;
         _movement.SetFrozen(false);
         _comboQueuedFromHash = 0;
+        _animator.ResetTrigger(ComboTrigger);
+    }
 
+    private void MaybeRecoverFromStuckBusy()
+    {
+        if (!_isBusy) return;
+        if (_animator == null) return;
+
+        AnimatorStateInfo current = _animator.GetCurrentAnimatorStateInfo(0);
+        if (IsAttackState(current)) return;
+
+        if (_animator.IsInTransition(0))
+        {
+            AnimatorStateInfo next = _animator.GetNextAnimatorStateInfo(0);
+            if (IsAttackState(next)) return;
+        }
+
+        _isBusy = false;
+        _movement.SetFrozen(false);
+        _comboQueuedFromHash = 0;
         _animator.ResetTrigger(ComboTrigger);
     }
 
@@ -174,7 +206,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         if (_animator != null)
         {
             var current = _animator.GetCurrentAnimatorStateInfo(0);
-            if (IsSlashState(current.shortNameHash)) return;
+            if (IsAttackState(current)) return;
         }
 
         _isBusy = false;
@@ -182,7 +214,6 @@ public class PlayerController : MonoBehaviour, ICombatant
         _comboQueuedFromHash = 0;
     }
 
-    // Called by animation event
     private void PerformMeleeHit()
     {
         if (_meleeHitPoint == null) return;
@@ -231,6 +262,10 @@ public class PlayerController : MonoBehaviour, ICombatant
     private static bool IsSlashState(int hash) => hash == InwardSlashHash || hash == OutwardSlashHash;
     private static bool IsLocomotionState(int hash) => hash == IdleHash || hash == RunHash;
 
+    private static bool IsAttackState(AnimatorStateInfo stateInfo) => stateInfo.shortNameHash == AttackHash ||
+                                                                      IsSlashState(stateInfo.shortNameHash) ||
+                                                                      stateInfo.tagHash == AttackTagHash;
+
     private void UpdateAnimator()
     {
         if (_animator == null) return;
@@ -261,10 +296,20 @@ public class PlayerController : MonoBehaviour, ICombatant
         AudioManager.Instance.PlaySfx(clip);
     }
 
-    // ICombatant
     public int GetAttackPower() => _meleeDamage;
     public void TakeDamage(int amount) => _stats.TakeDamage(amount);
     public void Heal(int amount) => _stats.Heal(amount);
-    public void OnCombatStart() { }
-    public void OnCombatEnd(bool won) { }
+
+    public void OnCombatStart()
+    {
+    }
+
+    public void OnCombatEnd(bool won)
+    {
+    }
+
+    public void SetMeleeDamage(int damage)
+    {
+        _meleeDamage = damage;
+    }
 }
