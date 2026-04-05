@@ -53,7 +53,7 @@ public class DeathScreenUI : MonoBehaviour
     {
         UnwirePlayerStats();
         ResolvePlayerStats();
-        if (_playerStats == null) return;
+        _playerStats = PlayerController.Instance.gameObject.GetComponent<PlayerStats>();
 
         _playerStats.PlayerDied += OnPlayerDied;
         _playerStats.PlayerRevived += OnPlayerRevived;
