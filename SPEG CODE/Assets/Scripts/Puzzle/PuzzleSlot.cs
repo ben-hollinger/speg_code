@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,19 +8,13 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
     private bool needsFilled = false;
     public Color emptyColor = Color.black;
     public Color filledColor = Color.green;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
+    void Start() { }
+    void Update() { }
 
     public void OnDrop(PointerEventData eventData)
     {
+<<<<<<< HEAD
         if (eventData.pointerDrag != null)
         {
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().localPosition;
@@ -35,6 +28,22 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
             UpdateColor();
             
         }
+=======
+        if (eventData.pointerDrag == null) return;
+
+        GameObject item = eventData.pointerDrag;
+        RectTransform itemRect = item.GetComponent<RectTransform>();
+
+        // Parent first so anchoredPosition is relative to this slot
+        item.transform.SetParent(transform, true);
+
+        // Now snap to centre using anchoredPosition, not localPosition
+        itemRect.anchoredPosition = Vector2.zero;
+
+        isFilled = true;
+        Debug.Log($"Filled slot: {gameObject.name}, fill status: {isFilled}");
+        UpdateColor();
+>>>>>>> origin/main
     }
 
     public void ClearSlot()
@@ -45,13 +54,9 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
 
     public void UpdateColor()
     {
-        if (isFilled){
-            GetComponent<Image>().color = filledColor;}
-        else
-        {
-            GetComponent<Image>().color = emptyColor;
-        }
+        GetComponent<Image>().color = isFilled ? filledColor : emptyColor;
     }
+<<<<<<< HEAD
     
     public void setNeedsFilled(bool value)
     {
@@ -73,3 +78,11 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
         return isFilled==needsFilled;
     }
 }
+=======
+
+    public void setNeedsFilled(bool value) => needsFilled = value;
+    public bool getNeedsFilled() => needsFilled;
+    public bool getIsFilled() => isFilled;
+    public bool isSolved() => isFilled == needsFilled;
+}
+>>>>>>> origin/main

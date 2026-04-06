@@ -1,6 +1,13 @@
 using System.Text;
+<<<<<<< HEAD
 using UnityEngine;
 using UnityEngine.SceneManagement;
+=======
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+>>>>>>> origin/main
 using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour
@@ -10,6 +17,7 @@ public class StatsUI : MonoBehaviour
     private const string HeartGlyph = "\u2764";
 
     [Header("References")]
+<<<<<<< HEAD
     [SerializeField] private Text _xpLineText;
     [SerializeField] private Text _threadLineText;
     [SerializeField] private XPBar _xpBar;
@@ -18,10 +26,32 @@ public class StatsUI : MonoBehaviour
     [Header("XP bar")]
     [SerializeField] private int _barSegmentCount = 40;
     [SerializeField] private string _xpFilledColor = "#4FA8FF";
+=======
+    [FormerlySerializedAs("_xpLineText")]
+    [FormerlySerializedAs("xpLineText")]
+    [SerializeField] private Graphic _xpLineGraphic;
+    [FormerlySerializedAs("_threadLineText")]
+    [FormerlySerializedAs("threadLineText")]
+    [SerializeField] private Graphic _threadLineGraphic;
+    [SerializeField] private XPBar _xpBar;
+    [FormerlySerializedAs("playerStats")]
+    [SerializeField] private PlayerStats _playerStats;
+
+    [Header("XP bar")]
+    [FormerlySerializedAs("barSegmentCount")]
+    [SerializeField] private int _barSegmentCount = 40;
+    [FormerlySerializedAs("xpFilledColor")]
+    [SerializeField] private string _xpFilledColor = "#4FA8FF";
+    [FormerlySerializedAs("xpEmptyColor")]
+>>>>>>> origin/main
     [SerializeField] private string _xpEmptyColor = "#1A1F2E";
 
     [Header("Life (hearts)")]
     [SerializeField] private int _healthPerHeart = 1;
+<<<<<<< HEAD
+=======
+    [FormerlySerializedAs("heartColor")]
+>>>>>>> origin/main
     [SerializeField] private string _fullHeartColor = "#e858d8";
 
     private readonly StringBuilder _sb = new StringBuilder(256);
@@ -36,10 +66,15 @@ public class StatsUI : MonoBehaviour
         if (_xpBar == null)
             _xpBar = XPBar.Instance;
 
+<<<<<<< HEAD
         if (_xpLineText != null)
             _xpLineText.supportRichText = true;
         if (_threadLineText != null)
             _threadLineText.supportRichText = true;
+=======
+        EnableRichText(_xpLineGraphic);
+        EnableRichText(_threadLineGraphic);
+>>>>>>> origin/main
     }
 
     private void OnEnable()
@@ -66,6 +101,12 @@ public class StatsUI : MonoBehaviour
 
     private void ResolvePlayerStats()
     {
+<<<<<<< HEAD
+=======
+        if (_playerStats != null)
+            return;
+
+>>>>>>> origin/main
         if (PlayerController.Instance != null)
             _playerStats = PlayerController.Instance.GetComponent<PlayerStats>();
     }
@@ -92,6 +133,12 @@ public class StatsUI : MonoBehaviour
 
     private void Update()
     {
+<<<<<<< HEAD
+=======
+        if (_xpBar == null)
+            _xpBar = XPBar.Instance;
+
+>>>>>>> origin/main
         RefreshXpLine(force: false);
     }
 
@@ -102,7 +149,11 @@ public class StatsUI : MonoBehaviour
 
     private void RefreshXpLine(bool force)
     {
+<<<<<<< HEAD
         if (_xpLineText == null || _xpBar == null)
+=======
+        if (_xpLineGraphic == null || _xpBar == null)
+>>>>>>> origin/main
             return;
 
         float fill;
@@ -163,12 +214,20 @@ public class StatsUI : MonoBehaviour
         _sb.Append('/');
         _sb.Append(toNextFloor);
         _sb.Append(" XP");
+<<<<<<< HEAD
         _xpLineText.text = _sb.ToString();
+=======
+        SetGraphicText(_xpLineGraphic, _sb.ToString());
+>>>>>>> origin/main
     }
 
     private void RefreshThreadLine()
     {
+<<<<<<< HEAD
         if (_threadLineText == null || _playerStats == null)
+=======
+        if (_threadLineGraphic == null || _playerStats == null)
+>>>>>>> origin/main
             return;
 
         int hph = _healthPerHeart > 0 ? _healthPerHeart : 1;
@@ -186,6 +245,36 @@ public class StatsUI : MonoBehaviour
             _sb.Append("</color> ");
         }
 
+<<<<<<< HEAD
         _threadLineText.text = _sb.ToString();
+=======
+        SetGraphicText(_threadLineGraphic, _sb.ToString());
+    }
+
+    private static void EnableRichText(Graphic textGraphic)
+    {
+        switch (textGraphic)
+        {
+            case Text legacyText:
+                legacyText.supportRichText = true;
+                break;
+            case TMP_Text tmpText:
+                tmpText.richText = true;
+                break;
+        }
+    }
+
+    private static void SetGraphicText(Graphic textGraphic, string value)
+    {
+        switch (textGraphic)
+        {
+            case Text legacyText:
+                legacyText.text = value;
+                break;
+            case TMP_Text tmpText:
+                tmpText.text = value;
+                break;
+        }
+>>>>>>> origin/main
     }
 }

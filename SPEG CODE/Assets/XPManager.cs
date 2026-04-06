@@ -60,11 +60,20 @@ public class XPManager : MonoBehaviour
 
     public void AddXP(int amount)
     {
+<<<<<<< HEAD
+=======
+        if (amount <= 0) return;
+>>>>>>> origin/main
         bool wasFull = BarFull;
         CurrentXP = Mathf.Min(CurrentXP + amount, xpToFillBar);
         OnXPChanged?.Invoke(CurrentXP, XPFraction);
         if (!wasFull && BarFull)
             OnBarFull?.Invoke();
+<<<<<<< HEAD
+=======
+
+        XPBar.Instance.AddXP(amount);
+>>>>>>> origin/main
     }
 
     public bool HasPiece(int pieceID) => _collectedPieceIDs.Contains(pieceID);

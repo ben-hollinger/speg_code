@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour, ICombatant
     [SerializeField] private Transform _targetPlayer;
 
     [Header("UI")]
-    [SerializeField] private Slider _healthBarSlider;
+    public Slider _healthBarSlider;
     private int _currentHealth;
     private bool _isDefeated;
     private bool _isGrappleFrozen;
@@ -164,8 +164,19 @@ public class EnemyController : MonoBehaviour, ICombatant
         if (_animator != null)
             _animator.SetTrigger("Death");
 
+        AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
+        GetComponent<BossSequence>()?.OnBossDefeated();
+
+        if (XPBar.Instance != null)
+        {
+            XPBar.Instance.AddXP(_enemyData.XPReward);
+        }
+
+        _healthBarSlider.gameObject.SetActive(false);
+
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
+<<<<<<< HEAD
 
         AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
 
@@ -173,6 +184,8 @@ public class EnemyController : MonoBehaviour, ICombatant
             XPBar.Instance.AddXP(_enemyData.XPReward);
 
         _healthBarSlider.gameObject.SetActive(false);
+=======
+>>>>>>> origin/main
     }
 
     private void UpdateHealthBar()
