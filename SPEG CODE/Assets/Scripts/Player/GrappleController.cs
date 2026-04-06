@@ -42,6 +42,12 @@ public class GrappleController : MonoBehaviour
 
     private void Update()
     {
+        if (!HatSelector.IsActiveAbility(HatSelector.AbilityType.Grapple))
+        {
+            UpdateLineRenderer();
+            return;
+        }
+
         if (_state == GrappleState.Idle && Mouse.current.rightButton.wasPressedThisFrame)
             BeginGrappleShoot();
 

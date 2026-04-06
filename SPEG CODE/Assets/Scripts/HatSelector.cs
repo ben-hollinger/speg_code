@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class HatSelector : MonoBehaviour
 {
+    public enum AbilityType { MagicBlast, DoubleJump, DashingStrike, Shield, Grapple }
+
     // ═════════════════════════════════════════════════════════════════════════
     // LEVEL SETTING — change this one number for each level's scene.
     //
@@ -39,6 +41,8 @@ public class HatSelector : MonoBehaviour
     public MagicBlastShooter magicBlastShooter;
     // public DoubleJump doubleJumpAbility;
     // public DashingStrike dashingStrikeAbility;
+
+    public static AbilityType ActiveAbility { get; private set; } = AbilityType.MagicBlast;
 
     private GameObject[] allHats;
     private Button[] _abilityButtons;
@@ -118,9 +122,7 @@ public class HatSelector : MonoBehaviour
             hatPanel.SetActive(!hatPanel.activeSelf);
     }
 
-    // ── Ability switching ─────────────────────────────────────────────────────
-
-    private enum AbilityType { MagicBlast, DoubleJump, DashingStrike, Shield, Grapple }
+    public static bool IsActiveAbility(AbilityType type) => ActiveAbility == type;
 
     void DisableAllAbilities()
     {
@@ -134,6 +136,7 @@ public class HatSelector : MonoBehaviour
     void ActivateAbility(AbilityType type)
     {
         DisableAllAbilities();
+        ActiveAbility = type;
 
         switch (type)
         {

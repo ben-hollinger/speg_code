@@ -45,6 +45,9 @@ public class ShieldAbility : MonoBehaviour
 
     void Update()
     {
+        if (!HatSelector.IsActiveAbility(HatSelector.AbilityType.Shield))
+            return;
+
         if (_shieldActive && shieldAnchor != null && forcefieldVisual != null)
             forcefieldVisual.transform.position = shieldAnchor.position;
 
