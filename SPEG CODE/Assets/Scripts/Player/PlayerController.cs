@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour, ICombatant
     private PlayerStats _stats;
     private Animator _animator;
     private GrappleController _grappleController;
-    private DashController _dashController;
+    private DashStrikeController _dashController;
 
     private bool _isBusy;
     private bool _wasDead;
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         _stats = GetComponent<PlayerStats>();
         _animator = GetComponentInChildren<Animator>();
         _grappleController = GetComponent<GrappleController>();
-        _dashController = GetComponent<DashController>();
+        _dashController = GetComponent<DashStrikeController>();
         _wasDead = _stats.IsDead;
 
         if (_animator != null)

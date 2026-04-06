@@ -47,7 +47,7 @@ public class TreasureChest : MonoBehaviour
 
         if (Keyboard.current[openKey].wasPressedThisFrame
             && XPBar.Instance != null
-            && XPBar.Instance.currentXP)
+            /*&& XPBar.Instance.currentXP*/)
         {
             OpenChest();
         }

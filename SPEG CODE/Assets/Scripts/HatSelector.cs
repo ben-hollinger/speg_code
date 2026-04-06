@@ -38,7 +38,7 @@ public class HatSelector : MonoBehaviour
     // Uncomment as other abilities are implemented:
     public MagicBlastShooter magicBlastShooter;
     // public DoubleJump doubleJumpAbility;
-    // public DashingStrike dashingStrikeAbility;
+    public DashStrikeController dashingStrikeAbility;
 
     private GameObject[] allHats;
     private Button[] _abilityButtons;
@@ -128,7 +128,7 @@ public class HatSelector : MonoBehaviour
         if (grappleController != null) grappleController.enabled = false;
         if (magicBlastShooter != null)  magicBlastShooter.enabled  = false;
         // if (doubleJumpAbility    != null) doubleJumpAbility.enabled    = false;
-        // if (dashingStrikeAbility != null) dashingStrikeAbility.enabled = false;
+        if (dashingStrikeAbility != null) dashingStrikeAbility.enabled = false;
     }
 
     void ActivateAbility(AbilityType type)
@@ -149,7 +149,10 @@ public class HatSelector : MonoBehaviour
                 break;
 
             case AbilityType.DashingStrike:
-                Debug.Log("[HatSelector] Dashing Strike selected (not yet implemented)");
+                if (dashingStrikeAbility != null)
+                    dashingStrikeAbility.enabled = true;
+                else
+                    Debug.Log("[HatSelector] Dashing Strike selected (not yet implemented)");
                 break;
 
             case AbilityType.Shield:

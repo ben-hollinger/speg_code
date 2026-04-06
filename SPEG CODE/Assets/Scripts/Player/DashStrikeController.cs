@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DashController : MonoBehaviour
+public class DashStrikeController : MonoBehaviour
 {
     [Header("Dash Settings")]
     [SerializeField] private float _dashSpeed    = 22f;

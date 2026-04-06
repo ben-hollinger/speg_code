@@ -22,7 +22,7 @@ public class PuzzleManager : MonoBehaviour
         foreach (var requirement in fillRequirements)
         {
             slots[requirement].setNeedsFilled(true);
-            slots[requirement].GetComponent<Image>().color = Color.red;
+            //slots[requirement].GetComponent<Image>().color = Color.red; debug
         }
         
     }
@@ -52,8 +52,12 @@ public class PuzzleManager : MonoBehaviour
         if (slots.All(slot => slot.isSolved()))
         {
             isSolved = true;
-            //give key here
-            DisableUI();
+            //if (KeyManager.Instance != null)
+//                KeyManager.Instance.AddKey();
+                
+            //}
+            KeyManager.Instance.AddKey();
+            
         }
     }
     

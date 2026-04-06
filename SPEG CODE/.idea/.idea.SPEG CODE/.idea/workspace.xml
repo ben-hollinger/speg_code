@@ -19,6 +19,10 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Rock Minigame/TutorialAreaTrigger.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@37e0d4fc2503/Shaders/Lit.shader" root0="SKIP_HIGHLIGHTING" />
   </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
