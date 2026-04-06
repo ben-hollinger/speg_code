@@ -25,41 +25,49 @@ namespace NPC
         private int dialogueIndex = 0;
 
         private Animator animator;
+        private Transform playerTransform;
 
         void Start()
         {
             animator = GetComponentInChildren<Animator>();
             interactPromptUI.SetActive(false);
             dialogueUI.SetActive(false);
+
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+                playerTransform = playerObj.transform;
         }
 
         void Update()
         {
+            if (playerTransform != null)
+            {
+                float distance = Vector3.Distance(transform.position, playerTransform.position);
+                bool nowInRange = distance <= interactionRange;
+
+                if (nowInRange != playerInRange)
+                {
+                    playerInRange = nowInRange;
+
+                    if (playerInRange)
+                    {
+                        if (!isTalking)
+                            interactPromptUI.SetActive(true);
+                    }
+                    else
+                    {
+                        interactPromptUI.SetActive(false);
+                        EndDialogue();
+                    }
+                }
+            }
+
             if (playerInRange && Input.GetKeyDown(interactKey))
             {
                 if (!isTalking)
                     StartDialogue();
                 else
                     AdvanceDialogue();
-            }
-        }
-
-        void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                playerInRange = true;
-                interactPromptUI.SetActive(true);
-            }
-        }
-
-        void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                playerInRange = false;
-                interactPromptUI.SetActive(false);
-                EndDialogue();
             }
         }
 
