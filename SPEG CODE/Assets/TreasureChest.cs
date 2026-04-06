@@ -20,8 +20,11 @@ public class TreasureChest : MonoBehaviour
     public GameObject puzzleUI;
 
     [Header("XP Requirement")]
-    [Tooltip("How much XP the player needs before the chest can be opened.")]
+    [Tooltip("How much XP the player needs before the chest can be opened when no level requirement is set.")]
     [SerializeField] private float _requiredXP = 75f;
+
+    [Tooltip("Minimum player level required to open the chest. Set to 0 to use XP instead.")]
+    [SerializeField] private int _requiredLevel = 0;
 
     [Header("Messages")]
     [Tooltip("Shown when XP bar is not full yet.")]
@@ -45,9 +48,7 @@ public class TreasureChest : MonoBehaviour
 
         RefreshPrompt();
 
-        if (Keyboard.current[openKey].wasPressedThisFrame
-            && XPBar.Instance != null
-            && XPBar.Instance.currentXP)
+        if (Keyboard.current[openKey].wasPressedThisFrame && IsUnlocked())
         {
             OpenChest();
         }
@@ -71,8 +72,18 @@ public class TreasureChest : MonoBehaviour
     void RefreshPrompt()
     {
         if (promptText == null) return;
-        bool unlocked = XPBar.Instance != null && XPBar.Instance.currentXP >= _requiredXP;
+        bool unlocked = IsUnlocked();
         promptText.text = unlocked ? unlockedMessage : lockedMessage;
+    }
+
+    bool IsUnlocked()
+    {
+        if (XPBar.Instance == null) return false;
+
+        if (_requiredLevel > 0)
+            return XPBar.Instance.currentLevel >= Mathf.Max(1, _requiredLevel);
+
+        return XPBar.Instance.currentXP >= _requiredXP;
     }
 
     void OpenChest()

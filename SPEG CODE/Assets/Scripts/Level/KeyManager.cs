@@ -79,6 +79,7 @@ public class KeyManager : MonoBehaviour
         }
 
         Time.timeScale = 1f;
+        if (_keyUI != null) _keyUI.SetActive(false);
         SceneManager.LoadScene(_nextSceneName);
     }
 }
