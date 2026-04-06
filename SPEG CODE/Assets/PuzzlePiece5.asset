@@ -16,4 +16,4 @@ MonoBehaviour:
   pieceName: Piece5
   pieceSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   clueText: Here you go!
-  xpReward: 100
+  xpReward: 10
