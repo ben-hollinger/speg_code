@@ -15,5 +15,5 @@ MonoBehaviour:
   pieceID: 0
   pieceName: Piece1
   pieceSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  clueText: This is the rightmost square
+  clueText: Here you go!
   xpReward: 10
