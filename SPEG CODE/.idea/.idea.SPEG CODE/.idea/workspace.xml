@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a933986-75e0-4b75-bb90-b7c7ba3b5e38" name="Changes" comment="">
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPEG CODE/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Puzzle/PuzzleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Puzzle/PuzzleManager.cs" afterDir="false" />
->>>>>>> origin/main
-=======
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/level3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/level3.unity" afterDir="false" />
->>>>>>> origin/main
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,17 +15,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-<<<<<<< HEAD
-<<<<<<< HEAD
-  <component name="McpProjectServerCommands">
-    <commands />
-    <urls />
-=======
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/NPC/NPCController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@37e0d4fc2503/Shaders/Lit.shader" root0="SKIP_HIGHLIGHTING" />
->>>>>>> origin/main
-=======
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../ProjectSettings/EditorBuildSettings.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../ProjectSettings/ShaderGraphSettings.asset" root0="FORCE_HIGHLIGHTING" />
@@ -51,7 +30,6 @@
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
->>>>>>> origin/main
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
@@ -62,36 +40,9 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-<<<<<<< HEAD
-<<<<<<< HEAD
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "WilliamLeong",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
-  }
-}]]></component>
-  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
-    <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Unity.exe" />
-      <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;C:\Users\willi\UnityProjects\SE2250_project\speg_code\SPEG CODE&quot; -debugCodeOptimization" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\willi\UnityProjects\SE2250_project\speg_code\SPEG CODE" />
-=======
-=======
->>>>>>> origin/main
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
@@ -109,10 +60,6 @@
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;C:\Users\benja\Documents\2250FinalProject\SPEG CODE&quot; -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\benja\Documents\2250FinalProject\SPEG CODE" />
-<<<<<<< HEAD
->>>>>>> origin/main
-=======
->>>>>>> origin/main
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="ENV_FILE_PATHS" value="" />
       <option name="REDIRECT_INPUT_PATH" value="" />
@@ -121,18 +68,8 @@
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Unity.exe" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;C:\Users\willi\UnityProjects\SE2250_project\speg_code\SPEG CODE&quot; -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\willi\UnityProjects\SE2250_project\speg_code\SPEG CODE" />
-=======
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;C:\Users\benja\Documents\2250FinalProject\SPEG CODE&quot; -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\benja\Documents\2250FinalProject\SPEG CODE" />
->>>>>>> origin/main
-=======
-      <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;C:\Users\benja\Documents\2250FinalProject\SPEG CODE&quot; -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\benja\Documents\2250FinalProject\SPEG CODE" />
->>>>>>> origin/main
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="ENV_FILE_PATHS" value="" />
       <option name="REDIRECT_INPUT_PATH" value="" />
@@ -164,20 +101,11 @@
       <option name="presentableId" value="Default" />
       <updated>1772663367133</updated>
       <workItem from="1772663369577" duration="4000" />
-<<<<<<< HEAD
-      <workItem from="1774178210612" duration="5000" />
-      <workItem from="1774178822717" duration="3686000" />
-<<<<<<< HEAD
-=======
-      <workItem from="1774457372349" duration="11799000" />
->>>>>>> origin/main
-=======
       <workItem from="1773676336095" duration="10000" />
       <workItem from="1774276137902" duration="1074000" />
       <workItem from="1774452329296" duration="751000" />
       <workItem from="1774997702222" duration="6944000" />
       <workItem from="1775502977805" duration="2000" />
->>>>>>> origin/main
     </task>
     <task id="LOCAL-00001" summary="deleted 0">
       <option name="closed" value="true" />

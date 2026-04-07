@@ -19,8 +19,6 @@ public class TreasureChest : MonoBehaviour
     [Tooltip("The 2D puzzle panel to open when the chest is unlocked.")]
     public GameObject puzzleUI;
 
-<<<<<<< HEAD
-=======
     [Header("XP Requirement")]
     [Tooltip("How much XP the player needs before the chest can be opened when no level requirement is set.")]
     [SerializeField] private float _requiredXP = 75f;
@@ -28,7 +26,6 @@ public class TreasureChest : MonoBehaviour
     [Tooltip("Minimum player level required to open the chest. Set to 0 to use XP instead.")]
     [SerializeField] private int _requiredLevel = 0;
 
->>>>>>> origin/main
     [Header("Messages")]
     [Tooltip("Shown when XP bar is not full yet.")]
     public string lockedMessage   = "Chest is sealed.\nCollect all puzzle pieces first.";
@@ -51,13 +48,7 @@ public class TreasureChest : MonoBehaviour
 
         RefreshPrompt();
 
-<<<<<<< HEAD
-        if (Keyboard.current[openKey].wasPressedThisFrame
-            && XPManager.Instance != null
-            && XPManager.Instance.BarFull)
-=======
         if (Keyboard.current[openKey].wasPressedThisFrame && IsUnlocked())
->>>>>>> origin/main
         {
             OpenChest();
         }
@@ -81,10 +72,6 @@ public class TreasureChest : MonoBehaviour
     void RefreshPrompt()
     {
         if (promptText == null) return;
-<<<<<<< HEAD
-        bool full = XPManager.Instance != null && XPManager.Instance.BarFull;
-        promptText.text = full ? unlockedMessage : lockedMessage;
-=======
         bool unlocked = IsUnlocked();
         promptText.text = unlocked ? unlockedMessage : lockedMessage;
     }
@@ -97,20 +84,16 @@ public class TreasureChest : MonoBehaviour
             return XPBar.Instance.currentLevel >= Mathf.Max(1, _requiredLevel);
 
         return XPBar.Instance.currentXP >= _requiredXP;
->>>>>>> origin/main
     }
 
     void OpenChest()
     {
         _opened = true;
         if (promptUI != null) promptUI.SetActive(false);
-<<<<<<< HEAD
-=======
         
         // Grant a key to the player.
         if (KeyManager.Instance != null)
             KeyManager.Instance.AddKey();
->>>>>>> origin/main
 
         if (puzzleUI != null)
         {

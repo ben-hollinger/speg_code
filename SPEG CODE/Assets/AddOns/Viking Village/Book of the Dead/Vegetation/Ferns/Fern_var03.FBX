@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-version https://git-lfs.github.com/spec/v1
-oid sha256:070a105d9aab7e2b443ffdd82ea4e515937f9cb2932ffe087bc438737912a74b
-size 203268
-=======
 ; FBX 7.4.0 project file
 ; Copyright (C) 1997-2010 Autodesk Inc. and/or its licensors.
 ; All rights reserved.
@@ -858,4 +853,3 @@ Connections:  {
 	;Model::Fern_Var3_LOD0, DisplayLayer::fbx
 	C: "OO",3050725200,1986097120
 }
->>>>>>> origin/main

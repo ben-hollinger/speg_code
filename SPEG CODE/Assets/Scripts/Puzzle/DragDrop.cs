@@ -14,26 +14,13 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         canvasGroup = GetComponent<CanvasGroup>();
         rootCanvas = GetComponentInParent<Canvas>().rootCanvas;
     }
-<<<<<<< HEAD
-    
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-    }
-=======
 
     public void OnPointerDown(PointerEventData eventData) { }
->>>>>>> origin/main
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = false;
 
-<<<<<<< HEAD
-        transform.SetParent(transform.root); // move to top canvas while dragging
-        
-        
-=======
         originalParent = transform.parent;
 
         PuzzleSlot slot = originalParent.GetComponent<PuzzleSlot>();
@@ -49,25 +36,14 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {
         // Divide by canvas scale so delta is correct in both Overlay and Camera modes
         rectTransform.anchoredPosition += eventData.delta / rootCanvas.scaleFactor;
->>>>>>> origin/main
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
-<<<<<<< HEAD
-        
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        rectTransform.anchoredPosition+=eventData.delta;
-        
-=======
 
         // If it wasn't dropped on a slot, return it to where it came from
         if (transform.parent == rootCanvas.transform)
             transform.SetParent(originalParent, true);
->>>>>>> origin/main
     }
 }
