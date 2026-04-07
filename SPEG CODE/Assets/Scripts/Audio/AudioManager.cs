@@ -48,7 +48,11 @@ public class AudioManager : MonoBehaviour
             dialogueSource = gameObject.AddComponent<AudioSource>();
         dialogueSource.playOnAwake = false;
         dialogueSource.loop = false;
+<<<<<<< HEAD
+        dialogueSource.volume = 6;
+=======
         dialogueSource.volume = _dialogueVolume;
+>>>>>>> origin/main
 
         if (currentMusicClip != null)
         {
@@ -196,6 +200,12 @@ public class AudioManager : MonoBehaviour
 
     public void PlayDialogue(AudioClip clip, float volumeMultiplier = 1f)
     {
+<<<<<<< HEAD
+        float finalVolume = Mathf.Max(0f, sfxVolume * volumeMultiplier);
+        dialogueSource.Stop();
+        dialogueSource.clip = clip;
+        dialogueSource.volume = 6f;
+=======
         if (clip == null || dialogueSource == null)
             return;
 
@@ -203,6 +213,7 @@ public class AudioManager : MonoBehaviour
         dialogueSource.Stop();
         dialogueSource.clip = clip;
         dialogueSource.volume = finalVolume;
+>>>>>>> origin/main
         dialogueSource.Play();
     }
 

@@ -33,11 +33,11 @@ public class EnemyController : MonoBehaviour, ICombatant
         if (_enemyData != null) _currentHealth = _enemyData.MaxHealth;
         if (_animator == null) _animator = GetComponent<Animator>();
         if (_bulletEmitter == null) _bulletEmitter = GetComponent<BulletEmitter>();
-
         UpdateHealthBar();
     }
 
-    private void Start() {
+    private void Start()
+    {
         _targetPlayer = PlayerController.Instance.transform;
     }
 
@@ -49,11 +49,8 @@ public class EnemyController : MonoBehaviour, ICombatant
         if (_animator != null)
         {
             bool isInAttackState = _animator.GetCurrentAnimatorStateInfo(0).IsTag("attack");
-
             if (isInAttackState && !_wasInAttackState) _isAttacking = true;
-
             if (!isInAttackState && _wasInAttackState) OnAttackStateExited();
-
             _wasInAttackState = isInAttackState;
         }
 
@@ -66,29 +63,21 @@ public class EnemyController : MonoBehaviour, ICombatant
 
         bool playerInAggro = IsPlayerInAggroCylinder(_targetPlayer.position);
         if (playerInAggro && !_wasPlayerInAggro)
-        {
             _nextAttackTime = Time.time + _enemyData.AttackInterval;
-        }
+
         if (!playerInAggro)
         {
-            if (!_isAttacking)
-            {
-                _attackRequested = false;
-            }
+            if (!_isAttacking) _attackRequested = false;
             _wasPlayerInAggro = false;
             return;
         }
         _wasPlayerInAggro = true;
 
         if (!_isAttacking && !_attackRequested)
-        {
             FaceTarget(_targetPlayer.position);
-        }
 
         if (!_isAttacking && !_attackRequested && Time.time >= _nextAttackTime && _attackCount > 0)
-        {
             TriggerNextAttack();
-        }
     }
 
     private bool IsPlayerInAggroCylinder(Vector3 playerPosition)
@@ -96,7 +85,6 @@ public class EnemyController : MonoBehaviour, ICombatant
         Vector3 toPlayer = playerPosition - transform.position;
         float horizontalDistance = new Vector2(toPlayer.x, toPlayer.z).magnitude;
         float verticalDistance = Mathf.Abs(toPlayer.y);
-
         return horizontalDistance <= _enemyData.AggroRadius && verticalDistance <= _enemyData.AggroHeight;
     }
 
@@ -104,11 +92,7 @@ public class EnemyController : MonoBehaviour, ICombatant
     {
         Vector3 flatToTarget = targetPosition - transform.position;
         flatToTarget.y = 0f;
-        if (flatToTarget.sqrMagnitude <= 0.0001f)
-        {
-            return;
-        }
-
+        if (flatToTarget.sqrMagnitude <= 0.0001f) return;
         Quaternion targetRotation = Quaternion.LookRotation(flatToTarget.normalized, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _enemyData.TurnSpeed * Time.deltaTime);
     }
@@ -116,62 +100,37 @@ public class EnemyController : MonoBehaviour, ICombatant
     private void TriggerNextAttack()
     {
         if (_animator == null) return;
-
         if (_attackCount <= 0) return;
-
         _attackIndex = (_attackIndex + 1) % _attackCount;
         _attackRequested = true;
-
         _animator.SetInteger("AttackIndex", _attackIndex);
         _animator.SetTrigger("Attack");
     }
 
     public void OnAttackStateEntered()
     {
-        if (_isDefeated)
-        {
-            return;
-        }
-
+        if (_isDefeated) return;
         _isAttacking = true;
         _attackRequested = false;
     }
 
     public void OnAttackStateExited()
     {
-        if (_isDefeated || _enemyData == null)
-        {
-            return;
-        }
-
+        if (_isDefeated || _enemyData == null) return;
         _isAttacking = false;
         _attackRequested = false;
         _nextAttackTime = Time.time + _enemyData.AttackInterval;
     }
 
-    public void SetGrappleFrozen(bool frozen)
-    {
-        _isGrappleFrozen = frozen;
-    }
-
-    public int GetAttackPower()
-    {
-        return 1;
-    }
-
-    public void OnCombatStart() {}
-
-    public void OnCombatEnd(bool won) {}
+    public void SetGrappleFrozen(bool frozen) { _isGrappleFrozen = frozen; }
+    public int GetAttackPower() => 1;
+    public void OnCombatStart() { }
+    public void OnCombatEnd(bool won) { }
 
     public void TakeDamage(int amount)
     {
-        if (_isDefeated || amount <= 0)
-        {
-            return;
-        }
-
+        if (_isDefeated || amount <= 0) return;
         _currentHealth = Mathf.Max(0, _currentHealth - amount);
-
         if (_currentHealth <= 0)
         {
             Die();
@@ -184,30 +143,26 @@ public class EnemyController : MonoBehaviour, ICombatant
         }
     }
 
-    public void Heal(int amount) {
-        if (amount <= 0 || _isDefeated) {
-            return;
-        }
-
+    public void Heal(int amount)
+    {
+        if (amount <= 0 || _isDefeated) return;
         _currentHealth = Mathf.Clamp(_currentHealth + amount, 0, MaxHealth);
         UpdateHealthBar();
     }
 
     private void Die()
     {
-        if (_isDefeated)
-        {
-            return;
-        }
-
+        if (_isDefeated) return;
         _isDefeated = true;
+
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnEnemyDefeated();
+
         _isAttacking = false;
         _attackRequested = false;
 
         if (_animator != null)
-        {
             _animator.SetTrigger("Death");
-        }
 
         AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
         GetComponent<BossSequence>()?.OnBossDefeated();
@@ -221,11 +176,20 @@ public class EnemyController : MonoBehaviour, ICombatant
 
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
+<<<<<<< HEAD
+
+        AudioManager.Instance.PlaySfx(_enemyData.DeathSfx);
+
+        if (XPBar.Instance != null)
+            XPBar.Instance.AddXP(_enemyData.XPReward);
+
+        _healthBarSlider.gameObject.SetActive(false);
+=======
+>>>>>>> origin/main
     }
 
     private void UpdateHealthBar()
     {
-        _healthBarSlider.value = (float)_currentHealth/(float)MaxHealth;
+        _healthBarSlider.value = (float)_currentHealth / (float)MaxHealth;
     }
 }
-

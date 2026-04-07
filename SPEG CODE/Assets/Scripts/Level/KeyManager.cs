@@ -78,9 +78,16 @@ public class KeyManager : MonoBehaviour
             return;
         }
 
+<<<<<<< HEAD
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(_nextSceneName);
+    }
+}
+=======
         if (_keyUI != null) _keyUI.SetActive(false);
         Time.timeScale = 1f;
         if (_keyUI != null) _keyUI.SetActive(false);
         SceneManager.LoadScene(_nextSceneName);
     }
 }
+>>>>>>> origin/main

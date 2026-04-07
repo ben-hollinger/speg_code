@@ -14,6 +14,21 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+<<<<<<< HEAD
+        if (eventData.pointerDrag != null)
+        {
+            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().localPosition;
+            
+            GameObject item = eventData.pointerDrag;
+            item.transform.SetParent(transform);
+            
+            isFilled = true;
+            Debug.Log($"Filled slot: {gameObject.name}");
+            Debug.Log("fill status: "+isFilled.ToString());
+            UpdateColor();
+            
+        }
+=======
         if (eventData.pointerDrag == null) return;
 
         GameObject item = eventData.pointerDrag;
@@ -28,6 +43,7 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
         isFilled = true;
         Debug.Log($"Filled slot: {gameObject.name}, fill status: {isFilled}");
         UpdateColor();
+>>>>>>> origin/main
     }
 
     public void ClearSlot()
@@ -40,9 +56,33 @@ public class PuzzleSlot : MonoBehaviour, IDropHandler
     {
         GetComponent<Image>().color = isFilled ? filledColor : emptyColor;
     }
+<<<<<<< HEAD
+    
+    public void setNeedsFilled(bool value)
+    {
+        needsFilled = value;
+    }
+    
+    public bool getNeedsFilled(){
+        return needsFilled;
+    }
+    
+    
+    public bool getIsFilled()
+    {
+        return isFilled;
+    }
+
+    public bool isSolved()
+    {
+        return isFilled==needsFilled;
+    }
+}
+=======
 
     public void setNeedsFilled(bool value) => needsFilled = value;
     public bool getNeedsFilled() => needsFilled;
     public bool getIsFilled() => isFilled;
     public bool isSolved() => isFilled == needsFilled;
 }
+>>>>>>> origin/main

@@ -15,5 +15,9 @@ MonoBehaviour:
   pieceID: 1
   pieceName: Piece2
   pieceSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+<<<<<<< HEAD
+  clueText: This is the bottom-most square
+=======
   clueText: Here you go!
+>>>>>>> origin/main
   xpReward: 10
