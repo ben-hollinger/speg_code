@@ -105,3 +105,6 @@ InitTestScene*.unity*
 # Unity recovery artifacts
 **/_Recovery/
 Logs/
+
+# Guard against accidental nested Unity project copies
+SPEG CODE/SPEG CODE/

@@ -38,7 +38,10 @@ public class XPBar : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+
+        // Unity only allows persistence on root objects.
+        var persistentRoot = transform.root != null ? transform.root.gameObject : gameObject;
+        DontDestroyOnLoad(persistentRoot);
     }
 
     void OnEnable()
@@ -212,6 +215,5 @@ public class XPBar : MonoBehaviour
         Debug.Log("[XPBar] Reset to Level 1.");
     }
 }
-
 
 
