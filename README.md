@@ -4,7 +4,7 @@ Let's go boys. Sick project on the way. We're designing a crazy RPG game rn, gon
 Unity Version: Get your unity on 6000.3.10f1
 - Let's try to keep it that way for the rest of the project
 
-## NPC Controller Setup and Guide
+## NPC Dialogue Controller Setup and Guide
   # Step 1 — Attach the Script
   
   Select your NPC GameObject (e.g. Old Wizard) in the Hierarchy
