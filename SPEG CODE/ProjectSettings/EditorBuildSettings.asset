@@ -5,9 +5,21 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/EnemyPlayground.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: 7f5621bbfee0ee54dbb7630e8958e620
+  - enabled: 1
+    path: Assets/Scenes/Level5.unity
+    guid: 6ae59b3a87120d19288a7d3c20d1378f
+  - enabled: 0
+    path: Assets/Scenes/VillageLevel.unity
+    guid: 7deaa76ef091d6041a3a26b89940f807
+  - enabled: 1
+    path: Assets/Scenes/VillageTesting Scene 1.unity
+    guid: 6a56c5ff9a018f44697817a073bdfc06
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

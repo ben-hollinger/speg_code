@@ -30,7 +30,11 @@ public class PlayerController : MonoBehaviour, ICombatant
     private PlayerStats _stats;
     private Animator _animator;
     private GrappleController _grappleController;
+<<<<<<< HEAD
     private DoubleJump _doubleJump;
+=======
+    private DashStrikeController _dashController;
+>>>>>>> origin/main
 
     private bool _isBusy;
     private bool _wasDead;
@@ -58,6 +62,25 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     public static bool IsAliveForEnemies => Instance != null && !Instance.IsDead;
 
+<<<<<<< HEAD
+=======
+    public void SetMovementFrozen(bool frozen)
+    {
+        if (_movement == null) return;
+        if (frozen)
+        {
+            _movement.SetExternalLocomotionLock(true);
+            _movement.SetFrozen(true);
+            _movement.SetMoveInput(Vector2.zero);
+        }
+        else
+        {
+            _movement.SetExternalLocomotionLock(false);
+            _movement.SetFrozen(false);
+        }
+    }
+
+>>>>>>> origin/main
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -71,12 +94,24 @@ public class PlayerController : MonoBehaviour, ICombatant
         _stats = GetComponent<PlayerStats>();
         _animator = GetComponentInChildren<Animator>();
         _grappleController = GetComponent<GrappleController>();
+<<<<<<< HEAD
         _doubleJump = GetComponent<DoubleJump>();
+=======
+        _dashController = GetComponent<DashStrikeController>();
+>>>>>>> origin/main
         _wasDead = _stats.IsDead;
 
         if (_animator != null)
             _animator.SetBool(IsDeadParam, _stats.IsDead);
     }
+
+    private void Start()
+    {
+        Checkpoint.Restore(transform);
+        XPBar.Instance?.ApplyProgressionToPlayer();
+    }
+
+    public void SetMeleeDamage(int damage) => _meleeDamage = Mathf.Max(0, damage);
 
     private void OnDestroy()
     {
@@ -88,7 +123,9 @@ public class PlayerController : MonoBehaviour, ICombatant
     {
         bool isDead = _stats.IsDead;
 
-        if (!_wasDead && isDead)
+        if (!isDead)
+            _wasDead = false;
+        else if (!_wasDead)
         {
             _wasDead = true;
             HandleDeath();
@@ -109,6 +146,11 @@ public class PlayerController : MonoBehaviour, ICombatant
     private void HandleMoveInput(Keyboard kb)
     {
         if (kb == null) return;
+        if (_movement != null && _movement.IsExternalLocomotionLocked())
+        {
+            _movement.SetMoveInput(Vector2.zero);
+            return;
+        }
 
         float h = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f);
         float v = (kb.wKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed ? 1f : 0f);
@@ -133,6 +175,7 @@ public class PlayerController : MonoBehaviour, ICombatant
         if (mouse == null) return;
         if (!_movement.IsGrounded) return;
         if (_grappleController != null && _grappleController.IsGrappling) return;
+        if (_dashController != null && _dashController.IsDashing) return;
 
         if (!_isBusy && mouse.leftButton.wasPressedThisFrame)
         {
@@ -166,6 +209,26 @@ public class PlayerController : MonoBehaviour, ICombatant
 
         var next = _animator.GetNextAnimatorStateInfo(0);
         if (!IsLocomotionState(next.shortNameHash)) return;
+
+        _isBusy = false;
+        _movement.SetFrozen(false);
+        _comboQueuedFromHash = 0;
+        _animator.ResetTrigger(ComboTrigger);
+    }
+
+    private void MaybeRecoverFromStuckBusy()
+    {
+        if (!_isBusy) return;
+        if (_animator == null) return;
+
+        AnimatorStateInfo current = _animator.GetCurrentAnimatorStateInfo(0);
+        if (IsAttackState(current)) return;
+
+        if (_animator.IsInTransition(0))
+        {
+            AnimatorStateInfo next = _animator.GetNextAnimatorStateInfo(0);
+            if (IsAttackState(next)) return;
+        }
 
         _isBusy = false;
         _movement.SetFrozen(false);
@@ -261,6 +324,7 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private static bool IsSlashState(int hash) => hash == InwardSlashHash || hash == OutwardSlashHash;
     private static bool IsLocomotionState(int hash) => hash == IdleHash || hash == RunHash;
+    private static bool IsAttackState(AnimatorStateInfo stateInfo) => stateInfo.shortNameHash == AttackHash || IsSlashState(stateInfo.shortNameHash) || stateInfo.tagHash == AttackTagHash;
 
     private static bool IsAttackState(AnimatorStateInfo stateInfo) => stateInfo.shortNameHash == AttackHash ||
                                                                       IsSlashState(stateInfo.shortNameHash) ||
@@ -278,7 +342,9 @@ public class PlayerController : MonoBehaviour, ICombatant
 
     private void HandleDeath()
     {
+        AudioManager.Instance?.PlaySfx(BossSequence.PlayerDeathSfxWhileBossActive, 2.0f);
         _isBusy = false;
+        _movement.SetExternalLocomotionLock(false);
         _movement.SetFrozen(false);
         _movement.SetMoveInput(Vector2.zero);
 

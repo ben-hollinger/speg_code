@@ -39,6 +39,10 @@ public class MagicBlastShooter : MonoBehaviour
     {
         if (_stats == null || _stats.IsDead) return;
         if (_movement != null && !_movement.IsGrounded) return;
+<<<<<<< HEAD
+=======
+        if (!HatSelector.IsActiveAbility(HatSelector.AbilityType.MagicBlast)) return;
+>>>>>>> origin/main
         if (_grapple != null && _grapple.IsGrappling) return;
 
         if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
@@ -69,6 +73,11 @@ public class MagicBlastShooter : MonoBehaviour
     // This is the single place where the blast is spawned.
     private void FireGrapple()
     {
+<<<<<<< HEAD
+=======
+        if (!HatSelector.IsActiveAbility(HatSelector.AbilityType.MagicBlast)) return;
+
+>>>>>>> origin/main
         Vector3 origin = _spawnPoint != null ? _spawnPoint.position : transform.position + Vector3.up;
     
         // Use the animator's transform since that's what actually rotates with movement
@@ -90,4 +99,8 @@ public class MagicBlastShooter : MonoBehaviour
         _animator.ResetTrigger(GrappleShootTrigger);
         _animator.SetTrigger(GrappleEndTrigger);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main

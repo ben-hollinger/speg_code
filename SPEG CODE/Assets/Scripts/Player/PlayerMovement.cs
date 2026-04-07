@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _moveInput;
     private float _verticalVelocity;
     private bool _isFrozen;
+    private bool _externalLocomotionLock;
     private Vector3 _grappleMotion;
     public Vector3 MoveInput => _moveInput;
     public bool IsGrounded => _cc != null && _cc.isGrounded;
@@ -19,8 +20,21 @@ public class PlayerMovement : MonoBehaviour
         _gravity = gravity;
         _jumpForce = jumpForce;
     }
+<<<<<<< HEAD
+=======
+
+    public void SetExternalLocomotionLock(bool locked)
+    {
+        _externalLocomotionLock = locked;
+    }
+
+    public bool IsExternalLocomotionLocked() => _externalLocomotionLock;
+
+>>>>>>> origin/main
     public void SetFrozen(bool frozen)
     {
+        if (_externalLocomotionLock && !frozen)
+            return;
         _isFrozen = frozen;
     }
     public void SetGrappleMotion(Vector3 motion)
@@ -67,6 +81,10 @@ public class PlayerMovement : MonoBehaviour
         _verticalVelocity = 0f;
         _cc.Move(_grappleMotion * Time.fixedDeltaTime);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         var hazard = hit.gameObject.GetComponentInParent<Hazard>();
@@ -76,4 +94,8 @@ public class PlayerMovement : MonoBehaviour
             hazard.HandleControllerHit(gameObject);
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main

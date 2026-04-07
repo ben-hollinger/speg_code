@@ -4,6 +4,11 @@ using UnityEngine.InputSystem;
 
 public class HatSelector : MonoBehaviour
 {
+<<<<<<< HEAD
+=======
+    public enum AbilityType { MagicBlast, DoubleJump, DashingStrike, Shield, Grapple }
+
+>>>>>>> origin/main
     // ═════════════════════════════════════════════════════════════════════════
     // LEVEL SETTING — change this one number for each level's scene.
     //
@@ -13,7 +18,11 @@ public class HatSelector : MonoBehaviour
     //   4 = Magic Blast + Double Jump + Dashing Strike + Shield
     //   5 = All abilities (+ Grapple)
     // ═════════════════════════════════════════════════════════════════════════
+<<<<<<< HEAD
     private const int CURRENT_LEVEL = 4; //change this to level number 
+=======
+    [SerializeField] private int CURRENT_LEVEL = 4; // edited so now you can change level based on scene
+>>>>>>> origin/main
 
     [Header("Hat Panel UI")]
     public GameObject hatPanel;
@@ -36,9 +45,17 @@ public class HatSelector : MonoBehaviour
     public ShieldAbility shieldAbility;
     public GrappleController grappleController;
     // Uncomment as other abilities are implemented:
+<<<<<<< HEAD
     // public MagicBlast magicBlastAbility;
     // public DoubleJump doubleJumpAbility;
     // public DashingStrike dashingStrikeAbility;
+=======
+    public MagicBlastShooter magicBlastShooter;
+    // public DoubleJump doubleJumpAbility;
+    public DashStrikeController dashingStrikeAbility;
+
+    public static AbilityType ActiveAbility { get; private set; } = AbilityType.MagicBlast;
+>>>>>>> origin/main
 
     private GameObject[] allHats;
     private Button[] _abilityButtons;
@@ -118,27 +135,48 @@ public class HatSelector : MonoBehaviour
             hatPanel.SetActive(!hatPanel.activeSelf);
     }
 
+<<<<<<< HEAD
     // ── Ability switching ─────────────────────────────────────────────────────
 
     private enum AbilityType { MagicBlast, DoubleJump, DashingStrike, Shield, Grapple }
+=======
+    public static bool IsActiveAbility(AbilityType type) => ActiveAbility == type;
+>>>>>>> origin/main
 
     void DisableAllAbilities()
     {
         if (shieldAbility != null)     shieldAbility.enabled     = false;
         if (grappleController != null) grappleController.enabled = false;
+<<<<<<< HEAD
         // if (magicBlastAbility    != null) magicBlastAbility.enabled    = false;
         // if (doubleJumpAbility    != null) doubleJumpAbility.enabled    = false;
         // if (dashingStrikeAbility != null) dashingStrikeAbility.enabled = false;
+=======
+        if (magicBlastShooter != null)  magicBlastShooter.enabled  = false;
+        // if (doubleJumpAbility    != null) doubleJumpAbility.enabled    = false;
+        if (dashingStrikeAbility != null) dashingStrikeAbility.enabled = false;
+>>>>>>> origin/main
     }
 
     void ActivateAbility(AbilityType type)
     {
         DisableAllAbilities();
+<<<<<<< HEAD
+=======
+        ActiveAbility = type;
+>>>>>>> origin/main
 
         switch (type)
         {
             case AbilityType.MagicBlast:
+<<<<<<< HEAD
                 Debug.Log("[HatSelector] Magic Blast selected (not yet implemented)");
+=======
+                if (magicBlastShooter != null)
+                    magicBlastShooter.enabled = true;
+                else
+                    Debug.LogWarning("[HatSelector] MagicBlastShooter not assigned!");
+>>>>>>> origin/main
                 break;
 
             case AbilityType.DoubleJump:
@@ -146,7 +184,14 @@ public class HatSelector : MonoBehaviour
                 break;
 
             case AbilityType.DashingStrike:
+<<<<<<< HEAD
                 Debug.Log("[HatSelector] Dashing Strike selected (not yet implemented)");
+=======
+                if (dashingStrikeAbility != null)
+                    dashingStrikeAbility.enabled = true;
+                else
+                    Debug.Log("[HatSelector] Dashing Strike selected (not yet implemented)");
+>>>>>>> origin/main
                 break;
 
             case AbilityType.Shield:
