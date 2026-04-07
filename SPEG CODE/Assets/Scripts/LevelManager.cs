@@ -91,13 +91,11 @@ public class LevelManager : MonoBehaviour
 
     public void OnEnemyDefeated()
     {
-        _currentEnemyIndex++;
-        Debug.Log($"[LevelManager] Enemy defeated. Next index: {_currentEnemyIndex}/{_enemies.Length}");
-
-        if (_currentEnemyIndex >= _enemies.Length)
             TriggerLevelComplete();
-        else
-            SpawnNextEnemy();
+    }
+
+    void Update() {
+      if (_enemies[0].GetComponent<EnemyController>().IsDead) TriggerLevelComplete();
     }
 
     private void SpawnNextEnemy()
@@ -114,6 +112,8 @@ public class LevelManager : MonoBehaviour
 
     private void TriggerLevelComplete()
     {
+        KeyManager.Instance.AddKey();  
+
         if (_levelComplete) return;
         _levelComplete = true;
 
@@ -121,6 +121,7 @@ public class LevelManager : MonoBehaviour
 
         if (_levelCompleteUI != null)
             _levelCompleteUI.SetActive(true);
+
     }
 
     public void LoadNextLevel()

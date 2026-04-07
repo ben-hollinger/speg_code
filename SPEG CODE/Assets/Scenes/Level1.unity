@@ -3708,7 +3708,7 @@ MonoBehaviour:
   promptUI: {fileID: 626345202}
   promptText: {fileID: 1175220947}
   puzzleUI: {fileID: 0}
-  _requiredXP: 0
+  _requiredXP: 75
   _requiredLevel: 0
   lockedMessage: 'Chest is sealed.
 
@@ -4195,7 +4195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2123423058381335033, guid: 959d187eb3c65054eaa8345a4307f844, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 172.4
+      value: 291.2
       objectReference: {fileID: 0}
     - target: {fileID: 2123423058381335033, guid: 959d187eb3c65054eaa8345a4307f844, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4203,7 +4203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2123423058381335033, guid: 959d187eb3c65054eaa8345a4307f844, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 46.7
+      value: 161.8
       objectReference: {fileID: 0}
     - target: {fileID: 2123423058381335033, guid: 959d187eb3c65054eaa8345a4307f844, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8076,7 +8076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KeyManager
   _keyThreshold: 1
-  _nextSceneName: level3
+  _nextSceneName: Level2
   _keyUI: {fileID: 1684297491}
   _keyText: {fileID: 2133564863}
   _successMessage: 'Well done! You have your key.
