@@ -1,0 +1,4 @@
+*.hdr filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.unity filter=lfs diff=lfs merge=lfs -text
+Assets/Scenes/Level1.unity text -filter -diff -merge
